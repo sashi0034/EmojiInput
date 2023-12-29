@@ -2,7 +2,7 @@
 
 using System.Windows;
 
-namespace EmojiInput_Utils;
+namespace EmojiInput.Utils;
 
 public static class ControlUtil
 {

@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EmojiInput_Utils;
+using EmojiInput.Utils;
 
 namespace EmojiInput
 {

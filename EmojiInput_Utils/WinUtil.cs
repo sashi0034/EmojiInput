@@ -1,5 +1,7 @@
 ﻿#nullable enable
 
+using System;
+
 namespace EmojiInput_Utils;
 
 public static class WinUtil
