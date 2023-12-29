@@ -1,9 +1,8 @@
 ﻿#nullable enable
 
-using System;
 using System.Runtime.InteropServices;
 
-namespace EmojiInput.Utils;
+namespace EmojiInput_Utils;
 
 public struct RECT
 {

@@ -1,8 +1,6 @@
 ﻿#nullable enable
 
-using System;
-
-namespace EmojiInput.Utils;
+namespace EmojiInput_Utils;
 
 public static class Util
 {

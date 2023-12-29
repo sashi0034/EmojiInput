@@ -3,7 +3,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace EmojiInput.Utils;
+namespace EmojiInput_Utils;
 
 public static class TaskExtension
 {
