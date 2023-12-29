@@ -1,17 +1,20 @@
 ﻿#nullable enable
 
-using System.Windows;
+using System;
 
 namespace EmojiInput.Utils;
 
 public static class Util
 {
-    public static double GetWindowScaling(Window window)
-    {
-        PresentationSource? source = PresentationSource.FromVisual(window);
+    public static float Square(this float v) => v * v;
 
-        return source?.CompositionTarget != null
-            ? source.CompositionTarget.TransformToDevice.M11 // M11 gives the horizontal DPI scaling factor
-            : 1.0; // Default scale factor is 1.0 (100%)
+    public static int ToInt(this bool value)
+    {
+        return value ? 1 : 0;
+    }
+
+    public static int ToInt<T>(this T enumValue) where T : Enum
+    {
+        return Convert.ToInt32(enumValue);
     }
 }

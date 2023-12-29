@@ -24,4 +24,10 @@ public static class Win32
 
     [DllImport("User32.dll")]
     public static extern uint GetDpiForWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    public static extern int RegisterHotKey(IntPtr hWnd, int id, int modKey, int vKey);
+
+    [DllImport("user32.dll")]
+    public static extern int UnregisterHotKey(IntPtr hWnd, int id);
 }
