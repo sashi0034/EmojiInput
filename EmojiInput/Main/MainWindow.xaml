@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EmojiInput"
+        xmlns:local="clr-namespace:EmojiInput.Main"
+        xmlns:detail="clr-namespace:EmojiInput.Main.Detail"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -15,8 +16,7 @@
             <TextBlock x:Name="selectedAlias" Text="Name..."></TextBlock>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
-            <StackPanel Name="iconStackPanel">
-            </StackPanel>
+            <detail:IconCollection x:Name="iconCollection"></detail:IconCollection>
         </ScrollViewer>
     </Grid>
 </Window>

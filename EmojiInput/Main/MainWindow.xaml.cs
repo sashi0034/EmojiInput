@@ -29,11 +29,13 @@ namespace EmojiInput.Main
             _interop = new WindowInteropHelper(this);
             _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
 
-            new ImageLoading(_emojiDatabase, Dispatcher, iconStackPanel.Children)
+            new IconLoading(_emojiDatabase, Dispatcher, iconCollection)
                 .StartAsync(_cancellation.Token)
                 .RunTaskHandlingError();
 
             registerHotKeys();
+
+            startAsync(_cancellation.Token).RunTaskHandlingError();
         }
 
         private void registerHotKeys()

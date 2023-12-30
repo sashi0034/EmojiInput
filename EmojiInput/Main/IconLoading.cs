@@ -8,13 +8,14 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using EmojiInput_Model;
+using EmojiInput.Main.Detail;
 
 namespace EmojiInput.Main;
 
-public record ImageLoading(
+public record IconLoading(
     EmojiDatabase EmojiDatabase,
     Dispatcher Dispatcher,
-    UIElementCollection Stack)
+    IconCollection IconCollection)
 {
     public async Task StartAsync(CancellationToken cancel)
     {
@@ -57,7 +58,7 @@ public record ImageLoading(
                     Width = 64,
                     Source = src
                 };
-                Stack.Add(image);
+                IconCollection.Add(image);
             }
 
             bitmapImages.Clear();
