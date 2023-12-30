@@ -17,10 +17,4 @@ public static class Util
     {
         return Convert.ToInt32(enumValue);
     }
-
-    public static string UnicodeToCharacter(string unicode)
-    {
-        int code = int.Parse(unicode, System.Globalization.NumberStyles.HexNumber);
-        return char.ConvertFromUtf32(code);
-    }
 }

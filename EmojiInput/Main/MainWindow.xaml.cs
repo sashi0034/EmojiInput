@@ -3,8 +3,11 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
+using EmojiInput_Model;
 using EmojiInput_Utils;
 using EmojiInput.Utils;
 
@@ -17,14 +20,37 @@ namespace EmojiInput.Main
     {
         private readonly WindowInteropHelper _interop;
         private readonly CancellationTokenSource _cancellation = new();
+        private readonly EmojiDatabase _emojiDatabase;
 
         public MainWindow()
         {
             InitializeComponent();
             _interop = new WindowInteropHelper(this);
+            _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
+            setupImages();
 
             registerHotKeys();
             startAsync(_cancellation.Token).RunTaskHandlingError();
+        }
+
+        void setupImages()
+        {
+            foreach (var emoji in _emojiDatabase)
+            {
+                appendImage(emoji);
+            }
+        }
+
+        private void appendImage(EmojiData emoji)
+        {
+            var iconPath = "/Resource/emoji_icon/" + emoji.ImageFilename;
+            var src = new BitmapImage(new Uri(iconPath, UriKind.Relative));
+            var image = new Image
+            {
+                Width = 64,
+                Source = src
+            };
+            iconStackPanel.Children.Add(image);
         }
 
         private void registerHotKeys()
@@ -54,7 +80,7 @@ namespace EmojiInput.Main
             Show();
             popupOnActiveWindow();
 
-            selectedAlias.Text = Util.UnicodeToCharacter("2b50");
+            selectedAlias.Text = UnicodeUtil.UnicodeToCharacter("2b50");
         }
 
         private void popupOnActiveWindow()

@@ -7,9 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
             <TextBlock x:Name="selectedAlias" Text="Name..."></TextBlock>
-            <Image Source="/Resource/emoji_icon/emoji_u2b50.png" Width="64"></Image>
         </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Name="iconStackPanel">
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
