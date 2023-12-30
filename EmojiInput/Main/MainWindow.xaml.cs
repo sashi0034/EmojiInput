@@ -1,24 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using EmojiInput_Utils;
 using EmojiInput.Utils;
 
-namespace EmojiInput
+namespace EmojiInput.Main
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -34,6 +24,7 @@ namespace EmojiInput
             _interop = new WindowInteropHelper(this);
 
             registerHotKeys();
+            startAsync(_cancellation.Token).RunTaskHandlingError();
         }
 
         private void registerHotKeys()
@@ -62,6 +53,8 @@ namespace EmojiInput
             if (IsActive) return;
             Show();
             popupOnActiveWindow();
+
+            selectedAlias.Text = Util.UnicodeToCharacter("2b50");
         }
 
         private void popupOnActiveWindow()
@@ -69,7 +62,6 @@ namespace EmojiInput
             var rect = WinUtil.GetActiveWindowRect();
             var center = new Vector2(rect.Left + rect.Right, rect.Top + rect.Bottom) / 2;
             var tl = center / (float)ControlUtil.GetWindowScaling(this);
-
             float activeScaling = WinUtil.GetActiveWindowScaling();
             if (activeScaling == 0) return;
 

@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EmojiInput_Model\EmojiInput_Model.csproj" />
     <ProjectReference Include="..\EmojiInput_Utils\EmojiInput_Utils.csproj" />
   </ItemGroup>
