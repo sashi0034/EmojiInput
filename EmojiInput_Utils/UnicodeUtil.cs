@@ -22,7 +22,7 @@ public static class UnicodeUtil
             string textElement = textElementEnumerator.GetTextElement();
             int codePoint = char.ConvertToUtf32(textElement, 0);
             if (sb.Length > 0) sb.Append('_');
-            sb.Append($"u{codePoint:X}");
+            sb.Append($"u{codePoint:X4}");
         }
 
         return sb.ToString();

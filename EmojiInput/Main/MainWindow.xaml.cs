@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,30 +28,64 @@ namespace EmojiInput.Main
             InitializeComponent();
             _interop = new WindowInteropHelper(this);
             _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
-            setupImages();
+            setupImages(_cancellation.Token).RunTaskHandlingError();
 
             registerHotKeys();
             startAsync(_cancellation.Token).RunTaskHandlingError();
         }
 
-        void setupImages()
+        private async Task setupImages(CancellationToken cancel)
         {
+            var bitmapImages = new List<BitmapImage>();
+
             foreach (var emoji in _emojiDatabase)
             {
-                appendImage(emoji);
+                try
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    var iconPath = "Resource/emoji_icon/" + emoji.ImageFilename;
+                    bitmap.UriSource = new Uri(iconPath, UriKind.Relative);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                    bitmapImages.Add(bitmap);
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(e);
+                    continue;
+                }
+
+                if (bitmapImages.Count >= Consts.Large_100) await flushImagesAsync(bitmapImages, cancel);
             }
+
+            await flushImagesAsync(bitmapImages, cancel);
         }
 
-        private void appendImage(EmojiData emoji)
+        private async Task flushImagesAsync(List<BitmapImage> bitmapImages, CancellationToken cancel)
         {
-            var iconPath = "/Resource/emoji_icon/" + emoji.ImageFilename;
-            var src = new BitmapImage(new Uri(iconPath, UriKind.Relative));
-            var image = new Image
+            bool ok = false;
+            Dispatcher.Invoke(() =>
             {
-                Width = 64,
-                Source = src
-            };
-            iconStackPanel.Children.Add(image);
+                foreach (var src in bitmapImages)
+                {
+                    var image = new Image
+                    {
+                        Width = 64,
+                        Source = src
+                    };
+                    iconStackPanel.Children.Add(image);
+                }
+
+                bitmapImages.Clear();
+                ok = true;
+            });
+            while (true)
+            {
+                await Task.Delay(Consts.Large_100, cancel);
+                if (ok) break;
+            }
         }
 
         private void registerHotKeys()
