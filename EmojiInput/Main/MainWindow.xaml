@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBlock x:Name="selectedAlias" Text="Name..."></TextBlock>
+            <Image Source="/Resource/emoji_icon/emoji_u2b50.png" Width="64"></Image>
         </StackPanel>
     </Grid>
 </Window>

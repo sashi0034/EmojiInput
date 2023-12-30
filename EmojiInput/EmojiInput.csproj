@@ -1,15 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\EmojiInput_Model\EmojiInput_Model.csproj" />
-    <ProjectReference Include="..\EmojiInput_Utils\EmojiInput_Utils.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\EmojiInput_Model\EmojiInput_Model.csproj"/>
+        <ProjectReference Include="..\EmojiInput_Utils\EmojiInput_Utils.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Resource\emoji_icon\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 
 </Project>
