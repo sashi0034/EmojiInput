@@ -28,18 +28,21 @@ public record EmojiFlushProcess(
         EmojiIconCollection.Resize(filteredData.Count);
 
         int index = -1;
+        int queued = 0;
         foreach (var data in filteredData)
         {
             cancel.ThrowIfCancellationRequested();
             index++;
             var dataView = EmojiViewList[data.Index];
-            while (dataView.IsValid == false)
+            while (dataView.IsValid == false || queued >= Consts.Enough_100)
             {
                 // 画像が読み込まれるまで待機
+                queued = 0;
                 await Task.Delay(Consts.Enough_2000, cancel);
             }
 
             var fixedIndex = index;
+            queued++;
             EmojiIconCollection.Dispatcher.Invoke(() =>
             {
                 EmojiIconCollection.ChangeSource(fixedIndex, dataView.Bitmap);
