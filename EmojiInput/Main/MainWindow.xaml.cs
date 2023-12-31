@@ -84,7 +84,7 @@ namespace EmojiInput.Main
 
         private async Task startAsync(CancellationToken cancel)
         {
-            if (IsActive) return;
+            if (IsFocused) return;
             Show();
             popupOnActiveWindow();
             _focusCursorMover.MoveCursor(0);
