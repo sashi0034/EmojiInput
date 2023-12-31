@@ -15,7 +15,8 @@
                 Height="64"
                 BorderBrush="Black"
                 BorderThickness="4"
-                CornerRadius="4">
+                CornerRadius="4"
+                Panel.ZIndex="1">
         </Border>
     </Grid>
 </UserControl>
