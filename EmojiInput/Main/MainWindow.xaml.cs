@@ -127,15 +127,38 @@ namespace EmojiInput.Main
 
             if (iconCollection.CurrentSize == 0) return;
 
-            if (e.Key == Key.Left) _emojiCursor--;
-            else if (e.Key == Key.Right) _emojiCursor++;
-            else if (e.Key == Key.Up) _emojiCursor -= IconCollection.ColumnSize;
-            else if (e.Key == Key.Down) _emojiCursor += IconCollection.ColumnSize;
-            else return;
+            switch (e.Key)
+            {
+            case Key.Left:
+                if (iconCollection.IsFocused == false) return;
+                _emojiCursor--;
+                break;
+            case Key.Right:
+                if (iconCollection.IsFocused == false) return;
+                _emojiCursor++;
+                break;
+            case Key.Up:
+                _emojiCursor -= EmojiIconCollection.ColumnSize;
+                break;
+            case Key.Down:
+                _emojiCursor += EmojiIconCollection.ColumnSize;
+                break;
+            default:
+                return;
+            }
+
             // カーソル移動
             // TODO: 上下移動の操作でフォーカスが切り替わるように修正
-            _emojiCursor =
-                (_emojiCursor + iconCollection.CurrentSize * IconCollection.ColumnSize) % iconCollection.CurrentSize;
+            while (_emojiCursor < 0)
+            {
+                _emojiCursor += EmojiIconCollection.ColumnSize;
+            }
+
+            while (_emojiCursor >= iconCollection.CurrentSize)
+            {
+                _emojiCursor -= EmojiIconCollection.ColumnSize;
+            }
+
             iconCollection.LocateCursor(_emojiCursor);
             iconCollection.Focus();
         }

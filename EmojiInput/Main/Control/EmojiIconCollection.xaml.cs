@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace EmojiInput.Main.Control;
 
-public partial class IconCollection : UserControl
+public partial class EmojiIconCollection : UserControl
 {
     public const int ColumnSize = 10;
 
@@ -15,7 +15,7 @@ public partial class IconCollection : UserControl
 
     public int CurrentSize { get; private set; }
 
-    public IconCollection()
+    public EmojiIconCollection()
     {
         InitializeComponent();
 

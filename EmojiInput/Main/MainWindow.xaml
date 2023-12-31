@@ -27,7 +27,7 @@
             <TextBlock x:Name="selectedAlias" Text="Name..."></TextBlock>
         </Grid>
         <ScrollViewer Grid.Row="2">
-            <control:IconCollection x:Name="iconCollection"></control:IconCollection>
+            <control:EmojiIconCollection x:Name="iconCollection"></control:EmojiIconCollection>
         </ScrollViewer>
     </Grid>
 </Window>
