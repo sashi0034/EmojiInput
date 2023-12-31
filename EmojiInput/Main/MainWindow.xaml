@@ -10,7 +10,8 @@
         Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize"
         PreviewKeyDown="onPreviewKeyDown"
         PreviewTextInput="onPreviewTextInput"
-        ui:WindowHelper.UseModernWindowStyle="True">
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Closing="onClosing">
     <Grid Margin="10 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
@@ -8,10 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 using EmojiInput_Model;
 using EmojiInput_Utils;
-using EmojiInput.Main.Control;
 using EmojiInput.Main.Forward;
 using EmojiInput.Main.Process;
 using EmojiInput.Utils;
@@ -84,11 +83,15 @@ namespace EmojiInput.Main
 
         private async Task startAsync(CancellationToken cancel)
         {
-            if (IsFocused) return;
+            if (IsActive) return;
             Show();
             popupOnActiveWindow();
-            _focusCursorMover.MoveCursor(0);
-            searchTextBox.Focus();
+            Dispatcher.Invoke(() =>
+            {
+                searchTextBox.Focus();
+                searchTextBox.SelectAll();
+                // _focusCursorMover.MoveCursor(0);
+            });
         }
 
         private void popupOnActiveWindow()
@@ -147,6 +150,12 @@ namespace EmojiInput.Main
         private void scrollViewer_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key is Key.Left or Key.Right or Key.Down or Key.Up) e.Handled = true;
+        }
+
+        private void onClosing(object? sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }
