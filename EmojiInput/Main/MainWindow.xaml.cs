@@ -86,7 +86,7 @@ namespace EmojiInput.Main
             if (IsActive) return;
             Show();
             popupOnActiveWindow();
-            iconCollection.LocateCursor(0);
+            _focusCursorMover.MoveCursor(0);
             searchTextBox.Focus();
         }
 
@@ -100,7 +100,8 @@ namespace EmojiInput.Main
 
             Left = tl.X - (Width / activeScaling) / 2;
             Top = tl.Y - (Height / activeScaling) / 2;
-            Topmost = true;
+            // Topmost = true;
+            Focus();
         }
 
         private void searchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -112,10 +113,10 @@ namespace EmojiInput.Main
                     emoji.Description.Contains(searchText) || emoji.Aliases.Any(a => a.Contains(searchText)))
                 .ToList();
 
+            flushEmoji(filtered);
+
             // 検索したらカーソルをリセット
             if (filtered.Count > 0) _focusCursorMover.MoveCursor(0);
-
-            flushEmoji(filtered);
         }
 
         private void onPreviewKeyDown(object sender, KeyEventArgs e)
