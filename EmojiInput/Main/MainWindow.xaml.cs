@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace EmojiInput.Main
         private readonly CancellationTokenSource _cancellation = new();
         private readonly EmojiDatabase _emojiDatabase;
         private readonly EmojiViewList _emojiViewList;
+        private readonly EmojiFlushProcess _emojiFlushProcess;
 
         public MainWindow()
         {
@@ -31,24 +33,24 @@ namespace EmojiInput.Main
             _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
             _emojiViewList = new EmojiViewList(_emojiDatabase.Count);
 
-            new EmojiLoading(_emojiDatabase, _emojiViewList)
+            _emojiFlushProcess = new EmojiFlushProcess(iconCollection, _emojiViewList);
+
+            new EmojiLoadProcess(_emojiDatabase, _emojiViewList)
                 .StartAsync(_cancellation.Token)
                 .RunTaskHandlingError();
 
             iconCollection.Reserve(_emojiDatabase.Count);
 
-            flushEmoji();
+            flushEmoji(_emojiDatabase);
 
             registerHotKeys();
 
             startAsync(_cancellation.Token).RunTaskHandlingError();
         }
 
-        private void flushEmoji()
+        private void flushEmoji(IReadOnlyList<EmojiData> filteredData)
         {
-            new EmojiFlushing(iconCollection, _emojiViewList)
-                .StartAsync(_emojiDatabase, _cancellation.Token)
-                .RunTaskHandlingError();
+            _emojiFlushProcess.StartAsync(filteredData.ToList(), _cancellation.Token).RunTaskHandlingError();
         }
 
         private void registerHotKeys()
@@ -77,8 +79,6 @@ namespace EmojiInput.Main
             if (IsActive) return;
             Show();
             popupOnActiveWindow();
-
-            selectedAlias.Text = UnicodeUtil.UnicodeToCharacter("2b50");
         }
 
         private void popupOnActiveWindow()
@@ -92,6 +92,21 @@ namespace EmojiInput.Main
             Left = tl.X - (Width / activeScaling) / 2;
             Top = tl.Y - (Height / activeScaling) / 2;
             Topmost = true;
+        }
+
+        private void searchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var searchText = searchTextBox.Text.TrimStart();
+            var filtered = _emojiDatabase
+                .Where(emoji =>
+                    emoji.Description.Contains(searchText) || emoji.Aliases.Any(a => a.Contains(searchText)))
+                .ToList();
+            if (filtered.Count > 0)
+            {
+                selectedAlias.Text = filtered[0].Description;
+            }
+
+            flushEmoji(filtered);
         }
     }
 }

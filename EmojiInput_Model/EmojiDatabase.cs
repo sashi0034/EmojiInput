@@ -12,11 +12,14 @@ public record EmojiData(
     int Index,
     string EmojiCharacter,
     string ImageFilename,
-    List<string> Aliases);
+    string Description,
+    List<string> Aliases
+);
 
 internal class EmojiJson
 {
     [JsonProperty("emoji")] public string Emoji { get; set; }
+    [JsonProperty("description")] public string Description { get; set; }
     [JsonProperty("aliases")] public List<string> Aliases { get; set; }
 }
 
@@ -35,6 +38,7 @@ public class EmojiDatabase : List<EmojiData>
                 index,
                 e.Emoji,
                 $"emoji_{s}.png",
+                e.Description,
                 e.Aliases));
         }
     }

@@ -36,7 +36,15 @@ public partial class IconCollection : UserControl
 
     public void Resize(int length)
     {
-        throw new NotImplementedException();
+        for (int i = 0; i < length; ++i)
+        {
+            _reservedImaged[i].Visibility = Visibility.Visible;
+        }
+
+        for (int i = length; i < _reservedImaged.Count; ++i)
+        {
+            _reservedImaged[i].Visibility = Visibility.Collapsed;
+        }
     }
 
     public void ChangeSource(int index, BitmapImage image)

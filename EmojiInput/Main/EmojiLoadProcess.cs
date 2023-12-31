@@ -8,7 +8,7 @@ using EmojiInput_Model;
 
 namespace EmojiInput.Main;
 
-public record EmojiLoading(
+public record EmojiLoadProcess(
     EmojiDatabase EmojiDatabase,
     EmojiViewList ViewList)
 {

@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EmojiInput_Utils;
@@ -29,12 +30,25 @@ public static class TaskExtension
         }
         catch (Exception e)
         {
-            Console.Error.WriteLine(e);
+            if (e is OperationCanceledException oc)
+                Console.WriteLine($"{e.Message} [{oc.HResult}]");
+            else
+                Console.Error.WriteLine(e);
         }
     }
 
     public static void RunTaskHandlingError(this Task task)
     {
         task.RunTaskHandlingErrorAsync().Forget();
+    }
+
+    public static CancellationToken LinkToken(this CancellationToken cancel, CancellationTokenSource otherCancel)
+    {
+        return LinkToken(cancel, otherCancel.Token);
+    }
+
+    public static CancellationToken LinkToken(this CancellationToken cancel, CancellationToken otherCancel)
+    {
+        return CancellationTokenSource.CreateLinkedTokenSource(cancel, otherCancel).Token;
     }
 }

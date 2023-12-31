@@ -8,5 +8,7 @@ public static class Consts
 
     public const int MessageHotKey_0x0312 = 0x0312;
 
-    public const int Large_100 = 100;
+    public const int Enough_100 = 100;
+
+    public const int Enough_2000 = 2000;
 }
