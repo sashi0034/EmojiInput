@@ -26,10 +26,23 @@ public record FocusCursorMover(
         scrollToCursor();
     }
 
+    // いい感じにスクロール調整
     private void scrollToCursor()
     {
-        int scroll = EmojiIconCollection.ImageSize * (IconCollection.Cursor / EmojiIconCollection.ColumnSize);
-        ScrollViewer.ScrollToVerticalOffset(scroll);
+        int newScroll = EmojiIconCollection.ImageSize * (IconCollection.Cursor / EmojiIconCollection.ColumnSize);
+        double delta = newScroll - ScrollViewer.VerticalOffset;
+        const int freeSpace = 4;
+        if (delta < 0)
+        {
+            ScrollViewer.ScrollToVerticalOffset(newScroll);
+        }
+        else if (EmojiIconCollection.ImageSize * (freeSpace - 1) < delta)
+        {
+            if (delta < EmojiIconCollection.ImageSize * (freeSpace + 1))
+                ScrollViewer.ScrollToVerticalOffset(ScrollViewer.VerticalOffset + EmojiIconCollection.ImageSize);
+            else
+                ScrollViewer.ScrollToVerticalOffset(newScroll);
+        }
     }
 
     public void PreviewKeyDown(KeyEventArgs e)
