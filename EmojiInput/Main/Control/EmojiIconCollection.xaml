@@ -6,12 +6,14 @@
              xmlns:local="clr-namespace:EmojiInput.Main"
              mc:Ignorable="d"
              Focusable="True"
+             GotFocus="onGotFocus"
+             LostFocus="onLostFocus"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Name="rootGrid">
         <Border Name="cursorBorder"
                 Width="64"
                 Height="64"
-                BorderBrush="#32bcef"
+                BorderBrush="Black"
                 BorderThickness="4"
                 CornerRadius="4">
         </Border>

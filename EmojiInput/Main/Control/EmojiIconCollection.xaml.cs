@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace EmojiInput.Main.Control;
@@ -30,6 +29,7 @@ public partial class EmojiIconCollection : UserControl
         }
 
         pushGridRow(rootGrid);
+        focusCursor(false);
     }
 
     public void Reserve(int length)
@@ -66,6 +66,7 @@ public partial class EmojiIconCollection : UserControl
 
     public void LocateCursor(int index)
     {
+        if (index < 0) return;
         Grid.SetColumn(cursorBorder, index % ColumnSize);
         Grid.SetRow(cursorBorder, index / ColumnSize);
         Cursor = index;
@@ -96,5 +97,22 @@ public partial class EmojiIconCollection : UserControl
         {
             Height = new GridLength(1, GridUnitType.Star)
         });
+    }
+
+    private void onGotFocus(object sender, RoutedEventArgs e)
+    {
+        focusCursor(true);
+    }
+
+    private void onLostFocus(object sender, RoutedEventArgs e)
+    {
+        focusCursor(false);
+    }
+
+    private void focusCursor(bool isFocused)
+    {
+        cursorBorder.BorderBrush = isFocused
+            ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#32bcef"))
+            : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#80a0b0"));
     }
 }

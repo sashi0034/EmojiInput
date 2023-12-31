@@ -1,7 +1,6 @@
 ﻿#nullable enable
 
 using System.Collections.Generic;
-using System.Linq;
 using EmojiInput_Model;
 
 namespace EmojiInput.Main.Forward;
