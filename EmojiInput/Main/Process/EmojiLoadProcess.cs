@@ -31,7 +31,7 @@ public record EmojiLoadProcess(
             {
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
-                var iconPath = "Resource/emoji_icon/" + emoji.ImageFilename;
+                var iconPath = "Resource/emoji_icon/72/" + emoji.ImageFilename;
                 bitmap.UriSource = new Uri(iconPath, UriKind.Relative);
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
