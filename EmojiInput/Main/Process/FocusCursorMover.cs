@@ -21,7 +21,7 @@ public record FocusCursorMover(
     {
         IconCollection.LocateCursor(nextCursor);
         SelectedDescription.Text = nextCursor < FilteredList.List.Count
-            ? FilteredList.List[nextCursor].Description
+            ? $"{FilteredList.List[nextCursor].Description} ({FilteredList.List[nextCursor].ConcatAliases()})"
             : "-";
         scrollToCursor();
     }

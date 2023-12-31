@@ -1,8 +1,8 @@
 ﻿#nullable enable
 
-using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using EmojiInput_Utils;
 using Newtonsoft.Json;
 
@@ -14,7 +14,22 @@ public record EmojiData(
     string ImageFilename,
     string Description,
     List<string> Aliases
-);
+)
+{
+    public string ConcatAliases()
+    {
+        var sb = new StringBuilder();
+        bool first = true;
+        foreach (var alias in Aliases)
+        {
+            if (first) first = false;
+            else sb.Append(' ');
+            sb.Append($":{alias}:");
+        }
+
+        return sb.ToString();
+    }
+};
 
 internal class EmojiJson
 {
