@@ -23,12 +23,23 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="🔎 Search" VerticalAlignment="Center"></TextBlock>
-            <TextBox Grid.Column="1" HorizontalAlignment="Left" Name="searchTextBox" Text="" Width="400" Height="20" TextChanged="searchTextBox_OnTextChanged"></TextBox>
+            <TextBox Grid.Column="1"
+                     HorizontalAlignment="Left"
+                     Name="searchTextBox"
+                     Text=""
+                     Width="400" Height="20"
+                     TextChanged="searchTextBox_OnTextChanged">
+            </TextBox>
         </Grid>
         <Grid Grid.Row="1" Margin="10">
             <TextBlock x:Name="selectedDescription" Text="Name..." VerticalAlignment="Center"></TextBlock>
         </Grid>
-        <ScrollViewer Name="scrollViewer" Grid.Row="2" PreviewKeyDown="scrollViewer_OnPreviewKeyDown">
+
+        <!--テーマの確認: https://github.com/Kinnara/ModernWpf/blob/master/ModernWpf/ThemeResources/Dark.xaml-->
+        <ScrollViewer Name="scrollViewer"
+                      Grid.Row="2"
+                      Background="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                      PreviewKeyDown="scrollViewer_OnPreviewKeyDown">
             <control:EmojiIconCollection x:Name="iconCollection"></control:EmojiIconCollection>
         </ScrollViewer>
     </Grid>
