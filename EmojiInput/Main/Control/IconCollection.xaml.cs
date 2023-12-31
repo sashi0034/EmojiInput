@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +12,8 @@ public partial class IconCollection : UserControl
     public const int ColumnSize = 10;
 
     private readonly List<Image> _reservedImaged = new();
+
+    public int CurrentSize { get; private set; }
 
     public IconCollection()
     {
@@ -39,17 +42,19 @@ public partial class IconCollection : UserControl
         }
     }
 
-    public void Resize(int length)
+    public void Resize(int size)
     {
-        for (int i = 0; i < length; ++i)
+        for (int i = 0; i < size; ++i)
         {
             _reservedImaged[i].Visibility = Visibility.Visible;
         }
 
-        for (int i = length; i < _reservedImaged.Count; ++i)
+        for (int i = size; i < _reservedImaged.Count; ++i)
         {
             _reservedImaged[i].Visibility = Visibility.Collapsed;
         }
+
+        CurrentSize = size;
     }
 
     public void ChangeSource(int index, BitmapImage image)

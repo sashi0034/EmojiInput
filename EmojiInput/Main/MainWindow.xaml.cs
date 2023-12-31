@@ -11,6 +11,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using EmojiInput_Model;
 using EmojiInput_Utils;
+using EmojiInput.Main.Control;
 using EmojiInput.Main.Forward;
 using EmojiInput.Main.Process;
 using EmojiInput.Utils;
@@ -28,6 +29,8 @@ namespace EmojiInput.Main
         private readonly EmojiViewList _emojiViewList;
         private readonly EmojiFlushProcess _emojiFlushProcess;
 
+        private int _emojiCursor;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -42,7 +45,6 @@ namespace EmojiInput.Main
                 .RunTaskHandlingError();
 
             iconCollection.Reserve(_emojiDatabase.Count);
-            iconCollection.LocateCursor(0);
 
             flushEmoji(_emojiDatabase);
 
@@ -82,6 +84,8 @@ namespace EmojiInput.Main
             if (IsActive) return;
             Show();
             popupOnActiveWindow();
+            iconCollection.LocateCursor(0);
+            searchTextBox.Focus();
         }
 
         private void popupOnActiveWindow()
@@ -111,6 +115,45 @@ namespace EmojiInput.Main
             }
 
             flushEmoji(filtered);
+        }
+
+        private void onKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back)
+            {
+                focusSearchTextBox();
+                return;
+            }
+
+            if (iconCollection.CurrentSize == 0) return;
+
+            if (e.Key == Key.Left) _emojiCursor--;
+            else if (e.Key == Key.Right) _emojiCursor++;
+            else if (e.Key == Key.Up) _emojiCursor -= IconCollection.ColumnSize;
+            else if (e.Key == Key.Down) _emojiCursor += IconCollection.ColumnSize;
+            else return;
+            // カーソル移動
+            // TODO: 上下移動の操作でフォーカスが切り替わるように修正
+            _emojiCursor =
+                (_emojiCursor + iconCollection.CurrentSize * IconCollection.ColumnSize) % iconCollection.CurrentSize;
+            iconCollection.LocateCursor(_emojiCursor);
+            iconCollection.Focus();
+        }
+
+        private void onPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (e.Text.Length == 0) return;
+            if (char.IsLetterOrDigit(e.Text[0]) || e.Text[0] == '_')
+            {
+                // 英数字かアンダースコアが入力されたら検索欄にフォーカス
+                focusSearchTextBox();
+            }
+        }
+
+        private void focusSearchTextBox()
+        {
+            _emojiCursor = 0;
+            searchTextBox.Focus();
         }
     }
 }
