@@ -29,8 +29,6 @@ namespace EmojiInput.Main
         private readonly EmojiViewList _emojiViewList;
         private readonly EmojiFlushProcess _emojiFlushProcess;
 
-        private int _emojiCursor;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -127,21 +125,22 @@ namespace EmojiInput.Main
 
             if (iconCollection.CurrentSize == 0) return;
 
+            int nextCursor = iconCollection.Cursor;
             switch (e.Key)
             {
             case Key.Left:
                 if (iconCollection.IsFocused == false) return;
-                _emojiCursor--;
+                nextCursor--;
                 break;
             case Key.Right:
                 if (iconCollection.IsFocused == false) return;
-                _emojiCursor++;
+                nextCursor++;
                 break;
             case Key.Up:
-                _emojiCursor -= EmojiIconCollection.ColumnSize;
+                nextCursor -= EmojiIconCollection.ColumnSize;
                 break;
             case Key.Down:
-                _emojiCursor += EmojiIconCollection.ColumnSize;
+                nextCursor += EmojiIconCollection.ColumnSize;
                 break;
             default:
                 return;
@@ -149,17 +148,17 @@ namespace EmojiInput.Main
 
             // カーソル移動
             // TODO: 上下移動の操作でフォーカスが切り替わるように修正
-            while (_emojiCursor < 0)
+            while (nextCursor < 0)
             {
-                _emojiCursor += EmojiIconCollection.ColumnSize;
+                nextCursor += EmojiIconCollection.ColumnSize;
             }
 
-            while (_emojiCursor >= iconCollection.CurrentSize)
+            while (nextCursor >= iconCollection.CurrentSize)
             {
-                _emojiCursor -= EmojiIconCollection.ColumnSize;
+                nextCursor -= EmojiIconCollection.ColumnSize;
             }
 
-            iconCollection.LocateCursor(_emojiCursor);
+            iconCollection.LocateCursor(nextCursor);
             iconCollection.Focus();
         }
 
@@ -175,7 +174,7 @@ namespace EmojiInput.Main
 
         private void focusSearchTextBox()
         {
-            _emojiCursor = 0;
+            iconCollection.LocateCursor(0);
             searchTextBox.Focus();
         }
     }

@@ -15,6 +15,8 @@ public partial class EmojiIconCollection : UserControl
 
     public int CurrentSize { get; private set; }
 
+    public int Cursor { get; private set; }
+
     public EmojiIconCollection()
     {
         InitializeComponent();
@@ -66,6 +68,7 @@ public partial class EmojiIconCollection : UserControl
     {
         Grid.SetColumn(cursorBorder, index % ColumnSize);
         Grid.SetRow(cursorBorder, index / ColumnSize);
+        Cursor = index;
     }
 
     private void appendElement(Image uiElement)
