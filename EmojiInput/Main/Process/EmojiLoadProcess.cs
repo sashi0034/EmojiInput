@@ -5,8 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using EmojiInput_Model;
+using EmojiInput.Main.Forward;
 
-namespace EmojiInput.Main;
+namespace EmojiInput.Main.Process;
 
 public record EmojiLoadProcess(
     EmojiDatabase EmojiDatabase,

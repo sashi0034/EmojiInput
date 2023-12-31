@@ -11,6 +11,8 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using EmojiInput_Model;
 using EmojiInput_Utils;
+using EmojiInput.Main.Forward;
+using EmojiInput.Main.Process;
 using EmojiInput.Utils;
 
 namespace EmojiInput.Main

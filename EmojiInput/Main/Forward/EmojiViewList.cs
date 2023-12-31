@@ -1,10 +1,9 @@
 ﻿#nullable enable
 
-using System;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
-namespace EmojiInput.Main;
+namespace EmojiInput.Main.Forward;
 
 public class EmojiView
 {

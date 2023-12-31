@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmojiInput.Main"
-        xmlns:detail="clr-namespace:EmojiInput.Main.Detail"
+        xmlns:control="clr-namespace:EmojiInput.Main.Control"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -25,7 +25,7 @@
             <TextBlock x:Name="selectedAlias" Text="Name..."></TextBlock>
         </Grid>
         <ScrollViewer Grid.Row="2">
-            <detail:IconCollection x:Name="iconCollection"></detail:IconCollection>
+            <control:IconCollection x:Name="iconCollection"></control:IconCollection>
         </ScrollViewer>
     </Grid>
 </Window>

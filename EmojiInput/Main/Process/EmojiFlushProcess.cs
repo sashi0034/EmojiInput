@@ -1,14 +1,14 @@
 ﻿#nullable enable
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EmojiInput_Model;
 using EmojiInput_Utils;
-using EmojiInput.Main.Detail;
+using EmojiInput.Main.Control;
+using EmojiInput.Main.Forward;
 
-namespace EmojiInput.Main;
+namespace EmojiInput.Main.Process;
 
 public record EmojiFlushProcess(
     IconCollection IconCollection,
