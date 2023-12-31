@@ -11,7 +11,8 @@ public partial class EmojiIconCollection : UserControl
     public const int ColumnSize = 10;
     public const int ImageSize = 64;
 
-    private readonly List<Image> _reservedImaged = new();
+    private readonly List<Image> _reservedImages = new();
+    public IReadOnlyList<Image> ReservedImages => _reservedImages;
 
     public int CurrentSize { get; private set; }
 
@@ -35,7 +36,7 @@ public partial class EmojiIconCollection : UserControl
 
     public void Reserve(int length)
     {
-        while (_reservedImaged.Count < length)
+        while (_reservedImages.Count < length)
         {
             var newImage = new Image()
             {
@@ -50,12 +51,12 @@ public partial class EmojiIconCollection : UserControl
     {
         for (int i = 0; i < size; ++i)
         {
-            _reservedImaged[i].Visibility = Visibility.Visible;
+            _reservedImages[i].Visibility = Visibility.Visible;
         }
 
-        for (int i = size; i < _reservedImaged.Count; ++i)
+        for (int i = size; i < _reservedImages.Count; ++i)
         {
-            _reservedImaged[i].Visibility = Visibility.Collapsed;
+            _reservedImages[i].Visibility = Visibility.Collapsed;
         }
 
         CurrentSize = size;
@@ -63,7 +64,7 @@ public partial class EmojiIconCollection : UserControl
 
     public void ChangeSource(int index, BitmapImage image)
     {
-        _reservedImaged[index].Source = image;
+        _reservedImages[index].Source = image;
     }
 
     public void LocateCursor(int index)
@@ -76,8 +77,8 @@ public partial class EmojiIconCollection : UserControl
 
     private void appendElement(Image uiElement)
     {
-        int c = _reservedImaged.Count % ColumnSize;
-        int r = _reservedImaged.Count / ColumnSize;
+        int c = _reservedImages.Count % ColumnSize;
+        int r = _reservedImages.Count / ColumnSize;
 
         if (r >= rootGrid.RowDefinitions.Count)
         {
@@ -90,7 +91,7 @@ public partial class EmojiIconCollection : UserControl
         rootGrid.Children.Add(uiElement);
 
         // キャッシュにも格納
-        _reservedImaged.Add(uiElement);
+        _reservedImages.Add(uiElement);
     }
 
     private static void pushGridRow(Grid parent)

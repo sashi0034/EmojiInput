@@ -33,25 +33,40 @@ namespace EmojiInput.Main
         public MainWindow()
         {
             InitializeComponent();
+
             _interop = new WindowInteropHelper(this);
             _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
+            iconCollection.Reserve(_emojiDatabase.Count);
             _emojiViewList = new EmojiViewList(_emojiDatabase.Count);
 
             _emojiFlushProcess = new EmojiFlushProcess(iconCollection, _emojiViewList);
             _focusCursorMover = new FocusCursorMover(
                 _filteredList, selectedDescription, iconCollection, searchTextBox, scrollViewer);
+            _focusCursorMover.Subscribe();
 
             new EmojiLoadProcess(_emojiDatabase, _emojiViewList)
                 .StartAsync(_cancellation.Token)
                 .RunTaskHandlingError();
 
-            iconCollection.Reserve(_emojiDatabase.Count);
-
             flushEmoji(_emojiDatabase);
+
+            subscribeImageClicked();
 
             registerHotKeys();
 
             startAsync(_cancellation.Token).RunTaskHandlingError();
+        }
+
+        private void subscribeImageClicked()
+        {
+            iconCollection.ReservedImages.ForEachIndexed(((image, index) =>
+            {
+                image.MouseLeftButtonUp += ((_, _) =>
+                {
+                    _focusCursorMover.MoveCursor(index);
+                    sendEmojiAndClose();
+                });
+            }));
         }
 
         private void flushEmoji(List<EmojiData> filteredData)

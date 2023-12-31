@@ -17,6 +17,23 @@ public record FocusCursorMover(
     TextBox SearchTextBox,
     ScrollViewer ScrollViewer)
 {
+    public void Subscribe()
+    {
+        Point oldEnteredPos;
+        for (var i = 0; i < IconCollection.ReservedImages.Count; i++)
+        {
+            int index = i;
+            var image = IconCollection.ReservedImages[i];
+            image.MouseEnter += ((_, e) =>
+            {
+                var newEnteredPos = e.MouseDevice.GetPosition(SearchTextBox);
+                if (oldEnteredPos == newEnteredPos) return;
+                oldEnteredPos = newEnteredPos;
+                MoveCursor(index);
+            });
+        }
+    }
+
     public void MoveCursor(int nextCursor)
     {
         IconCollection.LocateCursor(nextCursor);
