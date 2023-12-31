@@ -36,30 +36,19 @@ namespace EmojiInput.Main
                 .RunTaskHandlingError();
 
             iconCollection.Reserve(_emojiDatabase.Count);
-            flushCollectionAsync(_emojiDatabase, _cancellation.Token).RunTaskHandlingError();
+
+            flushEmoji();
 
             registerHotKeys();
 
             startAsync(_cancellation.Token).RunTaskHandlingError();
         }
 
-        private async Task flushCollectionAsync(IEnumerable<EmojiData> filteredData, CancellationToken cancel)
+        private void flushEmoji()
         {
-            int index = -1;
-            foreach (var data in filteredData)
-            {
-                index++;
-                var dataView = _emojiViewList[data.Index];
-                while (dataView.IsValid == false)
-                {
-                    // 画像が読み込まれるまで待機
-                    await Task.Delay(Consts.Large_100, cancel);
-                }
-
-                var fixedIndex = index;
-                Dispatcher.Invoke(() => { iconCollection.ChangeSource(fixedIndex, dataView.Bitmap); });
-                Console.WriteLine("Loaded " + fixedIndex);
-            }
+            new EmojiFlushing(iconCollection, _emojiViewList)
+                .StartAsync(_emojiDatabase, _cancellation.Token)
+                .RunTaskHandlingError();
         }
 
         private void registerHotKeys()
