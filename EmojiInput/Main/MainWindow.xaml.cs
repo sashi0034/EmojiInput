@@ -122,7 +122,21 @@ namespace EmojiInput.Main
 
         private void onPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Enter)
+            {
+                sendEmojiAndClose();
+                return;
+            }
+
             _focusCursorMover.PreviewKeyDown(e);
+        }
+
+        private void sendEmojiAndClose()
+        {
+            int cursor = iconCollection.Cursor;
+            if (cursor < 0 || _filteredList.List.Count <= cursor) return;
+            Hide();
+            System.Windows.Forms.SendKeys.SendWait(_filteredList.List[cursor].EmojiCharacter);
         }
 
         private void onPreviewTextInput(object sender, TextCompositionEventArgs e)
