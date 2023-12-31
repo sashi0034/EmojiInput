@@ -14,14 +14,17 @@ namespace EmojiInput
     /// </summary>
     public partial class App : Application
     {
-        private readonly MainWindow _mainWindow = new();
+        private readonly MainWindow _mainWindow;
 
         public App()
         {
             InitializeComponent();
 
-            _mainWindow.ShowInTaskbar = false;
-            _mainWindow.ShowActivated = false;
+            _mainWindow = new MainWindow
+            {
+                ShowInTaskbar = false,
+                ShowActivated = false
+            };
         }
     }
 }

@@ -102,7 +102,7 @@ namespace EmojiInput.Main
             Left = tl.X - (Width / activeScaling) / 2;
             Top = tl.Y - (Height / activeScaling) / 2;
             // Topmost = true;
-            Focus();
+            Activate();
         }
 
         private void searchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)

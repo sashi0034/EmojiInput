@@ -113,8 +113,8 @@ public partial class EmojiIconCollection : UserControl
 
     private void focusCursor(bool isFocused)
     {
-        cursorBorder.BorderBrush = isFocused
-            ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#32bcef"))
-            : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#80a0b0"));
+        cursorBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(
+            isFocused ? "#32bcef" : "#343541"));
+        cursorBorder.BorderThickness = new Thickness(isFocused ? 4 : 2);
     }
 }

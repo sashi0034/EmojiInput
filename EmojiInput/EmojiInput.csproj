@@ -9,13 +9,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\EmojiInput_Model\EmojiInput_Model.csproj"/>
-        <ProjectReference Include="..\EmojiInput_Utils\EmojiInput_Utils.csproj"/>
+        <ProjectReference Include="..\EmojiInput_Model\EmojiInput_Model.csproj" />
+        <ProjectReference Include="..\EmojiInput_Utils\EmojiInput_Utils.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Resource\emoji_icon\**" CopyToOutputDirectory="PreserveNewest"/>
-        <Content Include="Resource\emoji.json" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="Resource\emoji_icon\**" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="Resource\emoji.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     </ItemGroup>
 
     <ItemGroup>

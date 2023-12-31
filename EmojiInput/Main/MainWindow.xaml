@@ -3,28 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:local="clr-namespace:EmojiInput.Main"
         xmlns:control="clr-namespace:EmojiInput.Main.Control"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize"
         PreviewKeyDown="onPreviewKeyDown"
-        PreviewTextInput="onPreviewTextInput">
-    <Grid>
+        PreviewTextInput="onPreviewTextInput"
+        ui:WindowHelper.UseModernWindowStyle="True">
+    <Grid Margin="10 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="10">
+        <Grid Grid.Row="0" Margin="10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="🔎 Search"></TextBlock>
-            <TextBox Grid.Column="1" Name="searchTextBox" Text="" TextChanged="searchTextBox_OnTextChanged"></TextBox>
+            <TextBlock Grid.Column="0" Text="🔎 Search" VerticalAlignment="Center"></TextBlock>
+            <TextBox Grid.Column="1" HorizontalAlignment="Left" Name="searchTextBox" Text="" Width="400" Height="20" TextChanged="searchTextBox_OnTextChanged"></TextBox>
         </Grid>
-        <Grid Grid.Row="1" Margin="10 0">
-            <TextBlock x:Name="selectedDescription" Text="Name..."></TextBlock>
+        <Grid Grid.Row="1" Margin="10">
+            <TextBlock x:Name="selectedDescription" Text="Name..." VerticalAlignment="Center"></TextBlock>
         </Grid>
         <ScrollViewer Name="scrollViewer" Grid.Row="2" PreviewKeyDown="scrollViewer_OnPreviewKeyDown">
             <control:EmojiIconCollection x:Name="iconCollection"></control:EmojiIconCollection>
