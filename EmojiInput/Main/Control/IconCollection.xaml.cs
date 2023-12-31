@@ -8,17 +8,23 @@ namespace EmojiInput.Main.Control;
 
 public partial class IconCollection : UserControl
 {
-    private const int columnSize = 10;
-
-    private readonly List<Grid> _girdList = new();
-    private Grid tailGrid => _girdList.Last();
+    public const int ColumnSize = 10;
 
     private readonly List<Image> _reservedImaged = new();
 
     public IconCollection()
     {
         InitializeComponent();
-        createNewGrid(stackPanel, _girdList);
+
+        for (int i = 0; i < ColumnSize; ++i)
+        {
+            rootGrid.ColumnDefinitions.Add(new ColumnDefinition
+            {
+                Width = new GridLength(1, GridUnitType.Star)
+            });
+        }
+
+        pushGridRow(rootGrid);
     }
 
     public void Reserve(int length)
@@ -29,7 +35,7 @@ public partial class IconCollection : UserControl
             {
                 Width = 64
             };
-            addElement(newImage);
+            appendElement(newImage);
         }
     }
 
@@ -51,35 +57,36 @@ public partial class IconCollection : UserControl
         _reservedImaged[index].Source = image;
     }
 
-    private void addElement(Image uiElement)
+    public void LocateCursor(int index)
     {
-        if (tailGrid.Children.Count >= columnSize)
+        Grid.SetColumn(cursorBorder, index % ColumnSize);
+        Grid.SetRow(cursorBorder, index / ColumnSize);
+    }
+
+    private void appendElement(Image uiElement)
+    {
+        int c = _reservedImaged.Count % ColumnSize;
+        int r = _reservedImaged.Count / ColumnSize;
+
+        if (r >= rootGrid.RowDefinitions.Count)
         {
             // 行が足りないから増やす
-            createNewGrid(stackPanel, _girdList);
+            pushGridRow(rootGrid);
         }
 
-        // 末尾の行の後ろの列に追加
-        Grid.SetColumn(uiElement, tailGrid.Children.Count % columnSize);
-        tailGrid.Children.Add(uiElement);
+        Grid.SetColumn(uiElement, c);
+        Grid.SetRow(uiElement, r);
+        rootGrid.Children.Add(uiElement);
 
         // キャッシュにも格納
         _reservedImaged.Add(uiElement);
     }
 
-    private static void createNewGrid(StackPanel parent, List<Grid> cachedList)
+    private static void pushGridRow(Grid parent)
     {
-        var grid = new Grid();
-        for (int i = 0; i < columnSize; i++)
+        parent.RowDefinitions.Add(new RowDefinition()
         {
-            var column = new ColumnDefinition
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            };
-            grid.ColumnDefinitions.Add(column);
-        }
-
-        parent.Children.Add(grid);
-        cachedList.Add(grid);
+            Height = new GridLength(1, GridUnitType.Star)
+        });
     }
 }

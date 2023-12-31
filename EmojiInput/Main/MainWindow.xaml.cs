@@ -42,6 +42,7 @@ namespace EmojiInput.Main
                 .RunTaskHandlingError();
 
             iconCollection.Reserve(_emojiDatabase.Count);
+            iconCollection.LocateCursor(0);
 
             flushEmoji(_emojiDatabase);
 
@@ -98,6 +99,7 @@ namespace EmojiInput.Main
 
         private void searchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            iconCollection.LocateCursor(0);
             var searchText = searchTextBox.Text.TrimStart();
             var filtered = _emojiDatabase
                 .Where(emoji =>

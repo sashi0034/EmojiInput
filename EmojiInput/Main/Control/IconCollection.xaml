@@ -6,8 +6,13 @@
              xmlns:local="clr-namespace:EmojiInput.Main"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <StackPanel x:Name="stackPanel">
-        </StackPanel>
+    <Grid Name="rootGrid">
+        <Border Name="cursorBorder"
+                Width="64"
+                Height="64"
+                BorderBrush="#32bcef"
+                BorderThickness="4"
+                CornerRadius="4">
+        </Border>
     </Grid>
 </UserControl>
