@@ -16,6 +16,9 @@ public record EmojiFlushProcess(
 {
     private CancellationTokenSource _cancellation = new();
 
+    /// <summary>
+    /// 読み込まれたBitmapImageを画面上へ反映する 
+    /// </summary>
     public async Task StartAsync(IReadOnlyList<EmojiData> filteredData, CancellationToken cancel)
     {
         _cancellation.Cancel();
@@ -38,15 +41,12 @@ public record EmojiFlushProcess(
             {
                 // 画像が読み込まれるまで待機
                 queued = 0;
-                await Task.Delay(Consts.Enough_2000, cancel);
+                await Task.Delay(Consts.Enough_500, cancel);
             }
 
             var fixedIndex = index;
             queued++;
-            IconCollection.Dispatcher.Invoke(() =>
-            {
-                IconCollection.ChangeSource(fixedIndex, dataView.Bitmap);
-            });
+            IconCollection.Dispatcher.Invoke(() => { IconCollection.ChangeSource(fixedIndex, dataView.Bitmap); });
         }
     }
 }

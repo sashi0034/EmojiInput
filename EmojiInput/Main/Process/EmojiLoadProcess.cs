@@ -13,6 +13,9 @@ public record EmojiLoadProcess(
     EmojiDatabase EmojiDatabase,
     EmojiViewList ViewList)
 {
+    /// <summary>
+    /// 画像ファイルを読み込み、BitmapImageに変換する 
+    /// </summary>
     public async Task StartAsync(CancellationToken cancel)
     {
         await Task.Run(() => { process(cancel); }, cancel);

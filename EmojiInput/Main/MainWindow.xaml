@@ -26,7 +26,7 @@
         <Grid Grid.Row="1" Margin="10 0">
             <TextBlock x:Name="selectedDescription" Text="Name..."></TextBlock>
         </Grid>
-        <ScrollViewer Grid.Row="2" PreviewKeyDown="scrollViewer_OnPreviewKeyDown">
+        <ScrollViewer Name="scrollViewer" Grid.Row="2" PreviewKeyDown="scrollViewer_OnPreviewKeyDown">
             <control:EmojiIconCollection x:Name="iconCollection"></control:EmojiIconCollection>
         </ScrollViewer>
     </Grid>

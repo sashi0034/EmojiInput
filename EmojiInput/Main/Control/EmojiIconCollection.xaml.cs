@@ -9,6 +9,7 @@ namespace EmojiInput.Main.Control;
 public partial class EmojiIconCollection : UserControl
 {
     public const int ColumnSize = 10;
+    public const int ImageSize = 64;
 
     private readonly List<Image> _reservedImaged = new();
 
@@ -38,7 +39,8 @@ public partial class EmojiIconCollection : UserControl
         {
             var newImage = new Image()
             {
-                Width = 64
+                Width = ImageSize,
+                Height = ImageSize,
             };
             appendElement(newImage);
         }

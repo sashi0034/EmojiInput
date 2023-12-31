@@ -39,7 +39,8 @@ namespace EmojiInput.Main
             _emojiViewList = new EmojiViewList(_emojiDatabase.Count);
 
             _emojiFlushProcess = new EmojiFlushProcess(iconCollection, _emojiViewList);
-            _focusCursorMover = new FocusCursorMover(_filteredList, selectedDescription, iconCollection, searchTextBox);
+            _focusCursorMover = new FocusCursorMover(
+                _filteredList, selectedDescription, iconCollection, searchTextBox, scrollViewer);
 
             new EmojiLoadProcess(_emojiDatabase, _emojiViewList)
                 .StartAsync(_cancellation.Token)
@@ -116,7 +117,7 @@ namespace EmojiInput.Main
             flushEmoji(filtered);
 
             // 検索したらカーソルをリセット
-            if (filtered.Count > 0) _focusCursorMover.MoveCursor(0);
+            _focusCursorMover.MoveCursor(0);
         }
 
         private void onPreviewKeyDown(object sender, KeyEventArgs e)

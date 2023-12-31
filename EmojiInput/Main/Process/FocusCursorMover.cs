@@ -1,5 +1,7 @@
 ﻿#nullable enable
 
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using EmojiInput_Model;
@@ -12,14 +14,22 @@ public record FocusCursorMover(
     EmojiFilteredList FilteredList,
     TextBlock SelectedDescription,
     EmojiIconCollection IconCollection,
-    TextBox SearchTextBox)
+    TextBox SearchTextBox,
+    ScrollViewer ScrollViewer)
 {
     public void MoveCursor(int nextCursor)
     {
         IconCollection.LocateCursor(nextCursor);
         SelectedDescription.Text = nextCursor < FilteredList.List.Count
             ? FilteredList.List[nextCursor].Description
-            : "?";
+            : "-";
+        scrollToCursor();
+    }
+
+    private void scrollToCursor()
+    {
+        int scroll = EmojiIconCollection.ImageSize * (IconCollection.Cursor / EmojiIconCollection.ColumnSize);
+        ScrollViewer.ScrollToVerticalOffset(scroll);
     }
 
     public void PreviewKeyDown(KeyEventArgs e)
@@ -62,9 +72,11 @@ public record FocusCursorMover(
             nextCursor++;
             break;
         case Key.Up:
+            if (IconCollection.IsFocused == false) return true;
             nextCursor -= EmojiIconCollection.ColumnSize;
             break;
         case Key.Down:
+            if (IconCollection.IsFocused == false) return true;
             nextCursor += EmojiIconCollection.ColumnSize;
             break;
         default:
@@ -88,7 +100,7 @@ public record FocusCursorMover(
             nextCursor -= EmojiIconCollection.ColumnSize;
         }
 
-        return nextCursor;
+        return Math.Max(0, nextCursor);
     }
 
     private void focusSearchTextBox()
