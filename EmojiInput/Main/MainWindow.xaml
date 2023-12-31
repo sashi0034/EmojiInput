@@ -7,7 +7,7 @@
         xmlns:control="clr-namespace:EmojiInput.Main.Control"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        PreviewKeyDown="onKeyDown"
+        PreviewKeyDown="onPreviewKeyDown"
         PreviewTextInput="onPreviewTextInput">
     <Grid>
         <Grid.RowDefinitions>
@@ -24,9 +24,9 @@
             <TextBox Grid.Column="1" Name="searchTextBox" Text="" TextChanged="searchTextBox_OnTextChanged"></TextBox>
         </Grid>
         <Grid Grid.Row="1" Margin="10 0">
-            <TextBlock x:Name="selectedAlias" Text="Name..."></TextBlock>
+            <TextBlock x:Name="selectedDescription" Text="Name..."></TextBlock>
         </Grid>
-        <ScrollViewer Grid.Row="2">
+        <ScrollViewer Grid.Row="2" PreviewKeyDown="scrollViewer_OnPreviewKeyDown">
             <control:EmojiIconCollection x:Name="iconCollection"></control:EmojiIconCollection>
         </ScrollViewer>
     </Grid>

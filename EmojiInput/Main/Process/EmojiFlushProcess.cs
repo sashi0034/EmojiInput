@@ -11,7 +11,7 @@ using EmojiInput.Main.Forward;
 namespace EmojiInput.Main.Process;
 
 public record EmojiFlushProcess(
-    EmojiIconCollection EmojiIconCollection,
+    EmojiIconCollection IconCollection,
     EmojiViewList EmojiViewList)
 {
     private CancellationTokenSource _cancellation = new();
@@ -25,7 +25,7 @@ public record EmojiFlushProcess(
 
     private async Task process(IReadOnlyList<EmojiData> filteredData, CancellationToken cancel)
     {
-        EmojiIconCollection.Resize(filteredData.Count);
+        IconCollection.Resize(filteredData.Count);
 
         int index = -1;
         int queued = 0;
@@ -43,9 +43,9 @@ public record EmojiFlushProcess(
 
             var fixedIndex = index;
             queued++;
-            EmojiIconCollection.Dispatcher.Invoke(() =>
+            IconCollection.Dispatcher.Invoke(() =>
             {
-                EmojiIconCollection.ChangeSource(fixedIndex, dataView.Bitmap);
+                IconCollection.ChangeSource(fixedIndex, dataView.Bitmap);
             });
         }
     }

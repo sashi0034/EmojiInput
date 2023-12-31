@@ -28,6 +28,8 @@ namespace EmojiInput.Main
         private readonly EmojiDatabase _emojiDatabase;
         private readonly EmojiViewList _emojiViewList;
         private readonly EmojiFlushProcess _emojiFlushProcess;
+        private readonly FocusCursorMover _focusCursorMover;
+        private readonly EmojiFilteredList _filteredList = new();
 
         public MainWindow()
         {
@@ -37,6 +39,7 @@ namespace EmojiInput.Main
             _emojiViewList = new EmojiViewList(_emojiDatabase.Count);
 
             _emojiFlushProcess = new EmojiFlushProcess(iconCollection, _emojiViewList);
+            _focusCursorMover = new FocusCursorMover(_filteredList, selectedDescription, iconCollection, searchTextBox);
 
             new EmojiLoadProcess(_emojiDatabase, _emojiViewList)
                 .StartAsync(_cancellation.Token)
@@ -51,8 +54,9 @@ namespace EmojiInput.Main
             startAsync(_cancellation.Token).RunTaskHandlingError();
         }
 
-        private void flushEmoji(IReadOnlyList<EmojiData> filteredData)
+        private void flushEmoji(List<EmojiData> filteredData)
         {
+            _filteredList.Refresh(filteredData);
             _emojiFlushProcess.StartAsync(filteredData.ToList(), _cancellation.Token).RunTaskHandlingError();
         }
 
@@ -107,75 +111,26 @@ namespace EmojiInput.Main
                 .Where(emoji =>
                     emoji.Description.Contains(searchText) || emoji.Aliases.Any(a => a.Contains(searchText)))
                 .ToList();
-            if (filtered.Count > 0)
-            {
-                selectedAlias.Text = filtered[0].Description;
-            }
+
+            // 検索したらカーソルをリセット
+            if (filtered.Count > 0) _focusCursorMover.MoveCursor(0);
 
             flushEmoji(filtered);
         }
 
-        private void onKeyDown(object sender, KeyEventArgs e)
+        private void onPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Back)
-            {
-                focusSearchTextBox();
-                return;
-            }
-
-            if (iconCollection.CurrentSize == 0) return;
-
-            int nextCursor = iconCollection.Cursor;
-            switch (e.Key)
-            {
-            case Key.Left:
-                if (iconCollection.IsFocused == false) return;
-                nextCursor--;
-                break;
-            case Key.Right:
-                if (iconCollection.IsFocused == false) return;
-                nextCursor++;
-                break;
-            case Key.Up:
-                nextCursor -= EmojiIconCollection.ColumnSize;
-                break;
-            case Key.Down:
-                nextCursor += EmojiIconCollection.ColumnSize;
-                break;
-            default:
-                return;
-            }
-
-            // カーソル移動
-            // TODO: 上下移動の操作でフォーカスが切り替わるように修正
-            while (nextCursor < 0)
-            {
-                nextCursor += EmojiIconCollection.ColumnSize;
-            }
-
-            while (nextCursor >= iconCollection.CurrentSize)
-            {
-                nextCursor -= EmojiIconCollection.ColumnSize;
-            }
-
-            iconCollection.LocateCursor(nextCursor);
-            iconCollection.Focus();
+            _focusCursorMover.PreviewKeyDown(e);
         }
 
         private void onPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (e.Text.Length == 0) return;
-            if (char.IsLetterOrDigit(e.Text[0]) || e.Text[0] == '_')
-            {
-                // 英数字かアンダースコアが入力されたら検索欄にフォーカス
-                focusSearchTextBox();
-            }
+            _focusCursorMover.PreviewTextInput(e);
         }
 
-        private void focusSearchTextBox()
+        private void scrollViewer_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            iconCollection.LocateCursor(0);
-            searchTextBox.Focus();
+            if (e.Key is Key.Left or Key.Right or Key.Down or Key.Up) e.Handled = true;
         }
     }
 }
