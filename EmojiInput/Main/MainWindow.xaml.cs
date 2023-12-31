@@ -22,20 +22,44 @@ namespace EmojiInput.Main
         private readonly WindowInteropHelper _interop;
         private readonly CancellationTokenSource _cancellation = new();
         private readonly EmojiDatabase _emojiDatabase;
+        private readonly EmojiViewList _emojiViewList;
 
         public MainWindow()
         {
             InitializeComponent();
             _interop = new WindowInteropHelper(this);
             _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
+            _emojiViewList = new EmojiViewList(_emojiDatabase.Count);
 
-            new IconLoading(_emojiDatabase, Dispatcher, iconCollection)
+            new EmojiLoading(_emojiDatabase, _emojiViewList)
                 .StartAsync(_cancellation.Token)
                 .RunTaskHandlingError();
+
+            iconCollection.Reserve(_emojiDatabase.Count);
+            flushCollectionAsync(_emojiDatabase, _cancellation.Token).RunTaskHandlingError();
 
             registerHotKeys();
 
             startAsync(_cancellation.Token).RunTaskHandlingError();
+        }
+
+        private async Task flushCollectionAsync(IEnumerable<EmojiData> filteredData, CancellationToken cancel)
+        {
+            int index = -1;
+            foreach (var data in filteredData)
+            {
+                index++;
+                var dataView = _emojiViewList[data.Index];
+                while (dataView.IsValid == false)
+                {
+                    // 画像が読み込まれるまで待機
+                    await Task.Delay(Consts.Large_100, cancel);
+                }
+
+                var fixedIndex = index;
+                Dispatcher.Invoke(() => { iconCollection.ChangeSource(fixedIndex, dataView.Bitmap); });
+                Console.WriteLine("Loaded " + fixedIndex);
+            }
         }
 
         private void registerHotKeys()

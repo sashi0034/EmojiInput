@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 namespace EmojiInput_Model;
 
 public record EmojiData(
+    int Index,
     string EmojiCharacter,
     string ImageFilename,
     List<string> Aliases);
@@ -26,10 +27,12 @@ public class EmojiDatabase : List<EmojiData>
         var emojis = JsonConvert.DeserializeObject<List<EmojiJson>>(File.ReadAllText(jsonPath));
         if (emojis == null) return;
 
-        foreach (var e in emojis)
+        for (var index = 0; index < emojis.Count; index++)
         {
+            var e = emojis[index];
             var s = UnicodeUtil.CharacterToUtf32(e.Emoji);
             this.Add(new EmojiData(
+                index,
                 e.Emoji,
                 $"emoji_{s}.png",
                 e.Aliases));
