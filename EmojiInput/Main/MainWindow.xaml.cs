@@ -31,7 +31,7 @@ namespace EmojiInput.Main
         private readonly EmojiFlushProcess _emojiFlushProcess;
         private readonly FocusCursorMover _focusCursorMover;
         private readonly EmojiFilteredModel _filteredModel = new();
-        private readonly EmojiIconSizeModel _iconSizeModel = new();
+        private readonly EmojiSettingModel _settingModel = new();
 
         public MainWindow()
         {
@@ -59,7 +59,8 @@ namespace EmojiInput.Main
             flushEmojiIcons();
 
             // 設定項目初期化
-            setupMenu();
+            new MenuSetup(_skinData, _settingModel, skinMenu, selectedSkinImage, iconSizeMenu).Invoke();
+            iconCollection.ChangeIconSize(_settingModel.IconSize);
 
             // アイコンクリック時の設定
             subscribeImageClicked();
@@ -70,34 +71,6 @@ namespace EmojiInput.Main
 #if DEBUG
             startAsync(_cancellation.Token).RunTaskHandlingError();
 #endif
-        }
-
-        private void setupMenu()
-        {
-            // 肌の色
-            foreach (var skin in _skinData.Keys.Prepend(""))
-            {
-                bool isChecked = skin == "";
-                var path = $"/Resource/emoji_icon/aliased/hand{(skin == "" ? "" : $"_{skin}")}.png";
-                var skinImage = new Image()
-                {
-                    Source = new BitmapImage(new Uri(path, UriKind.Relative)),
-                    Width = 20,
-                };
-                if (isChecked) selectedSkinImage.Source = skinImage.Source;
-                skinMenu.Items.Add(new RadioMenuItem
-                {
-                    Header = skinImage,
-                    IsChecked = isChecked
-                });
-            }
-
-            if (skinMenu.Items[0] is Image image) selectedSkinImage.Source = image.Source;
-
-            // アイコンサイズ
-            if (iconSizeMenu.Items[_iconSizeModel.Kind.ToInt()] is RadioMenuItem checkingIconSize)
-                checkingIconSize.IsChecked = true;
-            iconCollection.ChangeIconSize(_iconSizeModel.Kind);
         }
 
         private void subscribeImageClicked()
@@ -193,8 +166,8 @@ namespace EmojiInput.Main
         {
             int index = iconSizeMenu.Items.IndexOf(e.Source);
             if (index == -1) return;
-            _iconSizeModel.Kind = index.ToEnum<EmojiIconSizeKind>();
-            iconCollection.ChangeIconSize(_iconSizeModel.Kind);
+            _settingModel.IconSize = index.ToEnum<EmojiIconSizeKind>();
+            iconCollection.ChangeIconSize(_settingModel.IconSize);
             _focusCursorMover.ScrollToCursor();
         }
 
