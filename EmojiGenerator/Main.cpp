@@ -1,5 +1,4 @@
-﻿#include <iso646.h>
-# include <Siv3D.hpp> // Siv3D v0.6.12
+﻿# include <Siv3D.hpp> // Siv3D v0.6.12
 
 namespace
 {
@@ -71,6 +70,20 @@ namespace
 		}
 		return skinMetadata;
 	}
+
+	String saveSkinEmojis(const StringView skinColors, const Array<EmojiData>::value_type& e)
+	{
+		String concatenatedSkinEmoji{};
+		for (auto&& skin : skinColors)
+		{
+			const auto filename = e.aliases + U"_{:X}"_fmt(static_cast<uint32>(skin)) + U".png";
+			String skinEmoji = getSkinEmoji(e, skin);
+			if (not concatenatedSkinEmoji.empty()) concatenatedSkinEmoji += U" "_sv;
+			concatenatedSkinEmoji += skinEmoji;
+			saveEmojiImage(imageOutputDirectory, filename, skinEmoji);
+		}
+		return concatenatedSkinEmoji;
+	}
 }
 
 void Main()
@@ -111,24 +124,14 @@ void Main()
 	{
 		const auto& e = emojis[i];
 		JSON jsonElement{};
+		saveEmojiImage(imageOutputDirectory, e.aliases + U".png", e.emoji);
 		if (e.skin)
 		{
-			String concatenatedSkinEmoji{};
-			for (auto&& skin : skinColors)
-			{
-				const auto filename = e.aliases + U"_{:X}"_fmt(static_cast<uint32>(skin)) + U".png";
-				String skinEmoji = getSkinEmoji(e, skin);
-				if (not concatenatedSkinEmoji.empty()) concatenatedSkinEmoji += U" "_sv;
-				concatenatedSkinEmoji += skinEmoji;
-				saveEmojiImage(imageOutputDirectory, filename, skinEmoji);
-			}
+			// 肌色変更可能の絵文字
+			const String concatenatedSkinEmoji = saveSkinEmojis(skinColors, e);
 			jsonElement[U"key"] = e.aliases;
 			jsonElement[U"emojis"] = concatenatedSkinEmoji;
 			skinJsonArray.push_back(jsonElement);
-		}
-		else
-		{
-			saveEmojiImage(imageOutputDirectory, e.aliases + U".png", e.emoji);
 		}
 	}
 
