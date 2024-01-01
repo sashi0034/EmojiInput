@@ -1,9 +1,8 @@
 ﻿#nullable enable
 
 using System.Collections.Generic;
-using EmojiInput_Model;
 
-namespace EmojiInput.Main.Forward;
+namespace EmojiInput_Model;
 
 public class EmojiFilteredList
 {

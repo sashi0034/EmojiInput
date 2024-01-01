@@ -37,7 +37,7 @@ public record EmojiFlushProcess(
             cancel.ThrowIfCancellationRequested();
             index++;
             var dataView = EmojiViewList[data.Index];
-            while (dataView.IsValid == false || queued >= Consts.Enough_100)
+            while (dataView.IsValid == false || queued >= Consts.Enough_250)
             {
                 // 画像が読み込まれるまで待機
                 queued = 0;
@@ -46,7 +46,11 @@ public record EmojiFlushProcess(
 
             var fixedIndex = index;
             queued++;
-            IconCollection.Dispatcher.Invoke(() => { IconCollection.ChangeSource(fixedIndex, dataView.Bitmap); });
+            IconCollection.Dispatcher.Invoke(() =>
+            {
+                cancel.ThrowIfCancellationRequested();
+                IconCollection.ChangeSource(fixedIndex, dataView.Bitmap);
+            });
         }
     }
 }

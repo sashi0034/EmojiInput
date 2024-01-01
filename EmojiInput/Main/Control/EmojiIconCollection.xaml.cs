@@ -8,8 +8,8 @@ namespace EmojiInput.Main.Control;
 
 public partial class EmojiIconCollection : UserControl
 {
-    public const int ColumnSize = 10;
-    public const int ImageSize = 64;
+    public const int ColumnSize = 20;
+    public const int ImageSize = 32;
 
     private readonly List<Image> _reservedImages = new();
     public IReadOnlyList<Image> ReservedImages => _reservedImages;
@@ -32,6 +32,9 @@ public partial class EmojiIconCollection : UserControl
 
         pushGridRow(rootGrid);
         focusCursor(false);
+
+        cursorBorder.Width = ImageSize;
+        cursorBorder.Height = ImageSize;
     }
 
     public void Reserve(int length)
@@ -51,7 +54,7 @@ public partial class EmojiIconCollection : UserControl
     {
         for (int i = 0; i < size; ++i)
         {
-            _reservedImages[i].Visibility = Visibility.Visible;
+            _reservedImages[i].Visibility = Visibility.Hidden;
         }
 
         for (int i = size; i < _reservedImages.Count; ++i)
@@ -64,6 +67,7 @@ public partial class EmojiIconCollection : UserControl
 
     public void ChangeSource(int index, BitmapImage image)
     {
+        _reservedImages[index].Visibility = Visibility.Visible;
         _reservedImages[index].Source = image;
     }
 

@@ -10,6 +10,8 @@ public static class Consts
 
     public const int Enough_100 = 100;
 
+    public const int Enough_250 = 250;
+
     public const int Enough_500 = 500;
 
     public const int Enough_1000 = 500;

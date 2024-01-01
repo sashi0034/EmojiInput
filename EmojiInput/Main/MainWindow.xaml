@@ -32,8 +32,30 @@
                      TextChanged="searchTextBox_OnTextChanged">
             </TextBox>
         </Grid>
-        <Grid Grid.Row="1" Margin="10">
-            <TextBlock x:Name="selectedDescription" Text="Name..." VerticalAlignment="Center"></TextBlock>
+        <Grid Grid.Row="1" Margin="10 0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" x:Name="selectedDescription" Text="Name..." VerticalAlignment="Center" />
+                <ui:SimpleStackPanel Grid.Column="1"
+                                     Orientation="Horizontal"
+                                     HorizontalAlignment="Right">
+                    <TextBlock Text="⚙️" VerticalAlignment="Center"></TextBlock>
+                    <Menu VerticalAlignment="Center">
+                        <MenuItem Header="View">
+                            <ui:RadioMenuItem
+                                Header="Small icons"
+                                GroupName="SizeGroup" />
+                            <ui:RadioMenuItem
+                                Header="Large icons"
+                                GroupName="SizeGroup"
+                                IsChecked="True" />
+                        </MenuItem>
+                    </Menu>
+                </ui:SimpleStackPanel>
+            </Grid>
         </Grid>
 
         <!--テーマの確認: https://github.com/Kinnara/ModernWpf/blob/master/ModernWpf/ThemeResources/Dark.xaml-->
