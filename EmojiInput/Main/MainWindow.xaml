@@ -44,6 +44,19 @@
                                      HorizontalAlignment="Right">
                     <TextBlock Text="⚙️" VerticalAlignment="Center"></TextBlock>
                     <Menu VerticalAlignment="Center">
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <Image Width="20"
+                                       VerticalAlignment="Center"
+                                       Source="/Resource/emoji_icon/aliased/hand.png" />
+                            </MenuItem.Header>
+                            <Image Width="20" Source="/Resource/emoji_icon/aliased/hand.png" />
+                            <Image Width="20" Source="/Resource/emoji_icon/aliased/hand_1F3FB.png" />
+                            <Image Width="20" Source="/Resource/emoji_icon/aliased/hand_1F3FC.png" />
+                            <Image Width="20" Source="/Resource/emoji_icon/aliased/hand_1F3FD.png" />
+                            <Image Width="20" Source="/Resource/emoji_icon/aliased/hand_1F3FE.png" />
+                            <Image Width="20" Source="/Resource/emoji_icon/aliased/hand_1F3FF.png" />
+                        </MenuItem>
                         <MenuItem Header="View" x:Name="iconSizeMenu" Checked="iconSizeMenu_OnChecked">
                             <ui:RadioMenuItem
                                 Header="Small icons"
