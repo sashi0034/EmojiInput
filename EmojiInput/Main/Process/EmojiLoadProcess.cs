@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -16,6 +17,8 @@ public record EmojiLoadProcess(
     EmojiViewList ViewList)
 {
     private CancellationTokenSource _cancellation = new();
+
+    private Dictionary<string, BitmapImage> _skinIconCache = new();
 
     /// <summary>
     /// 画像ファイルを読み込み、BitmapImageに変換する 
@@ -54,12 +57,7 @@ public record EmojiLoadProcess(
             try
             {
                 // 読み込み
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = iconUri;
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.EndInit();
-                bitmap.Freeze();
+                var bitmap = emoji.HasSkinTones ? inquireSkinIconCache(iconUri) : loadBitmap(iconUri);
                 ViewList[index].Bitmap = bitmap;
                 ViewList[index].IsValid = true;
             }
@@ -68,5 +66,25 @@ public record EmojiLoadProcess(
                 Console.Error.WriteLine(e);
             }
         }
+    }
+
+    private BitmapImage inquireSkinIconCache(Uri iconUri)
+    {
+        if (_skinIconCache.TryGetValue(iconUri.OriginalString, out var hit)) return hit;
+
+        var loaded = loadBitmap(iconUri);
+        _skinIconCache[iconUri.OriginalString] = loaded;
+        return loaded;
+    }
+
+    private static BitmapImage loadBitmap(Uri iconUri)
+    {
+        var bitmap = new BitmapImage();
+        bitmap.BeginInit();
+        bitmap.UriSource = iconUri;
+        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+        bitmap.EndInit();
+        bitmap.Freeze();
+        return bitmap;
     }
 }
