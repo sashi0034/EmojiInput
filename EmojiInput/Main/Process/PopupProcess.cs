@@ -17,14 +17,18 @@ public record PopupProcess(
     public async Task StartAsync(CancellationToken cancel)
     {
         if (Window.IsActive) return;
-
-        popupOnActiveWindow();
         Window.Dispatcher.Invoke(() =>
         {
+            Window.WindowStyle = WindowStyle.None;
+            popupOnActiveWindow();
             searchTextBox.Focus();
             searchTextBox.SelectAll();
             // _focusCursorMover.MoveCursor(0);
         });
+
+        await Task.Delay(1, cancel);
+
+        Window.Dispatcher.Invoke(() => { Window.WindowStyle = WindowStyle.SingleBorderWindow; });
     }
 
     private void popupOnActiveWindow()
