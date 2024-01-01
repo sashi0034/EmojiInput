@@ -11,7 +11,7 @@ using EmojiInput.Main.Forward;
 namespace EmojiInput.Main.Process;
 
 public record FocusCursorMover(
-    EmojiFilteredList FilteredList,
+    EmojiFilteredModel FilteredModel,
     TextBlock SelectedDescription,
     EmojiIconCollection IconCollection,
     TextBox SearchTextBox,
@@ -37,26 +37,27 @@ public record FocusCursorMover(
     public void MoveCursor(int nextCursor)
     {
         IconCollection.LocateCursor(nextCursor);
-        SelectedDescription.Text = nextCursor < FilteredList.List.Count
-            ? $"{FilteredList.List[nextCursor].Description} ({FilteredList.List[nextCursor].ConcatAliases()})"
+        SelectedDescription.Text = nextCursor < FilteredModel.List.Count
+            ? $"{FilteredModel.List[nextCursor].Description} ({FilteredModel.List[nextCursor].ConcatAliases()})"
             : "-";
-        scrollToCursor();
+        ScrollToCursor();
     }
 
     // いい感じにスクロール調整
-    private void scrollToCursor()
+    public void ScrollToCursor()
     {
-        int newScroll = EmojiIconCollection.ImageSize * (IconCollection.Cursor / EmojiIconCollection.ColumnSize);
+        int newScroll = IconCollection.ImageSize * (IconCollection.Cursor / IconCollection.ColumnSize);
         double delta = newScroll - ScrollViewer.VerticalOffset;
-        const int freeSpace = 4;
+
+        double viewportHeight = ScrollViewer.ViewportHeight;
         if (delta < 0)
         {
             ScrollViewer.ScrollToVerticalOffset(newScroll);
         }
-        else if (EmojiIconCollection.ImageSize * (freeSpace - 1) < delta)
+        else if (viewportHeight - IconCollection.ImageSize < delta)
         {
-            if (delta < EmojiIconCollection.ImageSize * (freeSpace + 1))
-                ScrollViewer.ScrollToVerticalOffset(ScrollViewer.VerticalOffset + EmojiIconCollection.ImageSize);
+            if (delta < viewportHeight)
+                ScrollViewer.ScrollToVerticalOffset(ScrollViewer.VerticalOffset + IconCollection.ImageSize);
             else
                 ScrollViewer.ScrollToVerticalOffset(newScroll);
         }
@@ -103,11 +104,11 @@ public record FocusCursorMover(
             break;
         case Key.Up:
             if (IconCollection.IsFocused == false) return true;
-            nextCursor -= EmojiIconCollection.ColumnSize;
+            nextCursor -= IconCollection.ColumnSize;
             break;
         case Key.Down:
             if (IconCollection.IsFocused == false) return true;
-            nextCursor += EmojiIconCollection.ColumnSize;
+            nextCursor += IconCollection.ColumnSize;
             break;
         default:
             return false;
@@ -122,12 +123,12 @@ public record FocusCursorMover(
     {
         while (nextCursor < 0)
         {
-            nextCursor += EmojiIconCollection.ColumnSize;
+            nextCursor += IconCollection.ColumnSize;
         }
 
         while (nextCursor >= IconCollection.CurrentSize)
         {
-            nextCursor -= EmojiIconCollection.ColumnSize;
+            nextCursor -= IconCollection.ColumnSize;
         }
 
         return Math.Max(0, nextCursor);

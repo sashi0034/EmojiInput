@@ -44,14 +44,13 @@
                                      HorizontalAlignment="Right">
                     <TextBlock Text="⚙️" VerticalAlignment="Center"></TextBlock>
                     <Menu VerticalAlignment="Center">
-                        <MenuItem Header="View">
+                        <MenuItem Header="View" x:Name="iconSizeMenu" Checked="iconSizeMenu_OnChecked">
                             <ui:RadioMenuItem
                                 Header="Small icons"
                                 GroupName="SizeGroup" />
                             <ui:RadioMenuItem
                                 Header="Large icons"
-                                GroupName="SizeGroup"
-                                IsChecked="True" />
+                                GroupName="SizeGroup" />
                         </MenuItem>
                     </Menu>
                 </ui:SimpleStackPanel>

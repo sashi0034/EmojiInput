@@ -20,6 +20,11 @@ public static class Util
         return Convert.ToInt32(enumValue);
     }
 
+    public static T ToEnum<T>(this int value) where T : Enum
+    {
+        return (T)Enum.ToObject(typeof(T), value);
+    }
+
     public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
     {
         var forEach = source as T[] ?? source.ToArray();

@@ -1,15 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using EmojiInput_Model;
+using EmojiInput_Utils;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace EmojiInput.Main.Control;
 
 public partial class EmojiIconCollection : UserControl
 {
-    public const int ColumnSize = 20;
-    public const int ImageSize = 32;
+    public int ColumnSize { get; private set; }
+    private static IReadOnlyList<int> columnSizes = new List<int> { 20, 10 };
+
+    public int ImageSize { get; private set; }
+    private static IReadOnlyList<int> imageSizes = new List<int> { 32, 64 };
 
     private readonly List<Image> _reservedImages = new();
     public IReadOnlyList<Image> ReservedImages => _reservedImages;
@@ -22,19 +30,33 @@ public partial class EmojiIconCollection : UserControl
     {
         InitializeComponent();
 
-        for (int i = 0; i < ColumnSize; ++i)
-        {
-            rootGrid.ColumnDefinitions.Add(new ColumnDefinition
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            });
-        }
-
         pushGridRow(rootGrid);
         focusCursor(false);
+    }
+
+    public void ChangeIconSize(EmojiIconSizeKind kind)
+    {
+        ColumnSize = columnSizes[kind.ToInt()];
+        ImageSize = imageSizes[kind.ToInt()];
 
         cursorBorder.Width = ImageSize;
         cursorBorder.Height = ImageSize;
+
+        rootGrid.ColumnDefinitions.Clear();
+        for (int i = 0; i < ColumnSize; ++i)
+        {
+            rootGrid.ColumnDefinitions.Add(
+                new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        }
+
+        for (int i = 0; i < _reservedImages.Count(); i++)
+        {
+            _reservedImages[i].Width = ImageSize;
+            _reservedImages[i].Height = ImageSize;
+            locateImageOnGrid(i, _reservedImages[i]);
+        }
+
+        rootGrid.UpdateLayout();
     }
 
     public void Reserve(int length)
@@ -46,7 +68,8 @@ public partial class EmojiIconCollection : UserControl
                 Width = ImageSize,
                 Height = ImageSize,
             };
-            appendElement(newImage);
+            rootGrid.Children.Add(newImage);
+            _reservedImages.Add(newImage);
         }
     }
 
@@ -79,12 +102,12 @@ public partial class EmojiIconCollection : UserControl
         Cursor = index;
     }
 
-    private void appendElement(Image uiElement)
+    private void locateImageOnGrid(int index, Image uiElement)
     {
-        int c = _reservedImages.Count % ColumnSize;
-        int r = _reservedImages.Count / ColumnSize;
+        int c = index % ColumnSize;
+        int r = index / ColumnSize;
 
-        if (r >= rootGrid.RowDefinitions.Count)
+        while (r >= rootGrid.RowDefinitions.Count)
         {
             // 行が足りないから増やす
             pushGridRow(rootGrid);
@@ -92,10 +115,6 @@ public partial class EmojiIconCollection : UserControl
 
         Grid.SetColumn(uiElement, c);
         Grid.SetRow(uiElement, r);
-        rootGrid.Children.Add(uiElement);
-
-        // キャッシュにも格納
-        _reservedImages.Add(uiElement);
     }
 
     private static void pushGridRow(Grid parent)

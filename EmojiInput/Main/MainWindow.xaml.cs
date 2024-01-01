@@ -14,6 +14,7 @@ using EmojiInput_Utils;
 using EmojiInput.Main.Forward;
 using EmojiInput.Main.Process;
 using EmojiInput.Utils;
+using ModernWpf.Controls;
 
 namespace EmojiInput.Main
 {
@@ -28,12 +29,14 @@ namespace EmojiInput.Main
         private readonly EmojiViewList _emojiViewList;
         private readonly EmojiFlushProcess _emojiFlushProcess;
         private readonly FocusCursorMover _focusCursorMover;
-        private readonly EmojiFilteredList _filteredList = new();
+        private readonly EmojiFilteredModel _filteredModel = new();
+        private readonly EmojiIconSizeModel _iconSizeModel = new();
 
         public MainWindow()
         {
             InitializeComponent();
 
+            // 各初期化
             _interop = new WindowInteropHelper(this);
             _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
             iconCollection.Reserve(_emojiDatabase.Count);
@@ -41,20 +44,32 @@ namespace EmojiInput.Main
 
             _emojiFlushProcess = new EmojiFlushProcess(iconCollection, _emojiViewList);
             _focusCursorMover = new FocusCursorMover(
-                _filteredList, selectedDescription, iconCollection, searchTextBox, scrollViewer);
+                _filteredModel, selectedDescription, iconCollection, searchTextBox, scrollViewer);
             _focusCursorMover.Subscribe();
 
+            // 絵文字を非同期読み込み
             new EmojiLoadProcess(_emojiDatabase, _emojiViewList)
                 .StartAsync(_cancellation.Token)
                 .RunTaskHandlingError();
 
-            flushEmoji(_emojiDatabase);
+            // 絵文字を非同期表示
+            _filteredModel.Refresh(_emojiDatabase);
+            flushEmojiIcons();
 
+            // アイコンサイズ設定
+            if (iconSizeMenu.Items[_iconSizeModel.Kind.ToInt()] is RadioMenuItem checkingIconSize)
+                checkingIconSize.IsChecked = true;
+            iconCollection.ChangeIconSize(_iconSizeModel.Kind);
+
+            // アイコンクリック時の設定
             subscribeImageClicked();
 
+            // ホットキー設定
             registerHotKeys();
 
+#if DEBUG
             startAsync(_cancellation.Token).RunTaskHandlingError();
+#endif
         }
 
         private void subscribeImageClicked()
@@ -69,10 +84,9 @@ namespace EmojiInput.Main
             }));
         }
 
-        private void flushEmoji(List<EmojiData> filteredData)
+        private void flushEmojiIcons()
         {
-            _filteredList.Refresh(filteredData);
-            _emojiFlushProcess.StartAsync(filteredData.ToList(), _cancellation.Token).RunTaskHandlingError();
+            _emojiFlushProcess.StartAsync(_filteredModel.List, _cancellation.Token).RunTaskHandlingError();
         }
 
         private void registerHotKeys()
@@ -126,13 +140,8 @@ namespace EmojiInput.Main
         private void searchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             iconCollection.LocateCursor(0);
-            var searchText = searchTextBox.Text.TrimStart();
-            var filtered = _emojiDatabase
-                .Where(emoji =>
-                    emoji.Description.Contains(searchText) || emoji.Aliases.Any(a => a.Contains(searchText)))
-                .ToList();
-
-            flushEmoji(filtered);
+            _filteredModel.FilterRefresh(_emojiDatabase, searchTextBox.Text.TrimStart());
+            flushEmojiIcons();
 
             // 検索したらカーソルをリセット
             _focusCursorMover.MoveCursor(0);
@@ -152,9 +161,9 @@ namespace EmojiInput.Main
         private void sendEmojiAndClose()
         {
             int cursor = iconCollection.Cursor;
-            if (cursor < 0 || _filteredList.List.Count <= cursor) return;
+            if (cursor < 0 || _filteredModel.List.Count <= cursor) return;
             Hide();
-            System.Windows.Forms.SendKeys.SendWait(_filteredList.List[cursor].EmojiCharacter);
+            System.Windows.Forms.SendKeys.SendWait(_filteredModel.List[cursor].EmojiCharacter);
         }
 
         private void onPreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -171,6 +180,15 @@ namespace EmojiInput.Main
         {
             e.Cancel = true;
             Hide();
+        }
+
+        private void iconSizeMenu_OnChecked(object sender, RoutedEventArgs e)
+        {
+            int index = iconSizeMenu.Items.IndexOf(e.Source);
+            if (index == -1) return;
+            _iconSizeModel.Kind = index.ToEnum<EmojiIconSizeKind>();
+            iconCollection.ChangeIconSize(_iconSizeModel.Kind);
+            _focusCursorMover.ScrollToCursor();
         }
     }
 }
