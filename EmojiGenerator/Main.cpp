@@ -8,19 +8,27 @@ namespace
 		String aliases;
 		bool skin;
 	};
+
+	constexpr bool isSaveImage = true;
+	constexpr int commonImageSize = 64;
+	constexpr auto solutionRoot = U"../../"_sv;
+	constexpr auto outputDirectory = U"../../EmojiInput/Resource/emoji_icon/aliased/"_sv;
 }
 
-void saveEmojiImage(const String& outputDirectory, const String& filename, const String& emoji)
+void saveEmojiImage(StringView outputDirectory, const String& filename, const String& emoji)
 {
 	auto image = Image(Emoji(emoji));
-	constexpr int imageSaveSize = 64;
-	image.resize(((SizeF(image.size()) / image.size().maxComponent()) * imageSaveSize).asPoint());
+	image.scale(((SizeF(image.size()) / image.size().maxComponent()) * commonImageSize).asPoint());;
 
 	if (image.size().minComponent() == 0)
 	{
 		Console.writeln(U"Invalid image: " + filename);
 		return;
 	}
+
+	if constexpr (not isSaveImage) return;
+
+	image.resize(Size::One() * commonImageSize);
 
 	if (image.save(outputDirectory + filename))
 	{
@@ -34,8 +42,6 @@ void saveEmojiImage(const String& outputDirectory, const String& filename, const
 
 void Main()
 {
-	constexpr auto solutionRoot = U"../../"_sv;
-	const auto outputDirectory = solutionRoot + U"EmojiInput/Resource/emoji_icon/aliased/";
 	const JSON json = JSON::Load(solutionRoot + U"EmojiInput/Resource/emoji.json");
 
 	if (not json)
