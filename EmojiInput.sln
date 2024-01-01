@@ -3,30 +3,54 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiInput", "EmojiInput\EmojiInput.csproj", "{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiInput", "EmojiInput\EmojiInput.csproj", "{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiInput_Utils", "EmojiInput_Utils\EmojiInput_Utils.csproj", "{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiInput_Utils", "EmojiInput_Utils\EmojiInput_Utils.csproj", "{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiInput_Model", "EmojiInput_Model\EmojiInput_Model.csproj", "{82515C8C-C4D1-4D06-98DF-3ED3F082976A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiInput_Model", "EmojiInput_Model\EmojiInput_Model.csproj", "{82515C8C-C4D1-4D06-98DF-3ED3F082976A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EmojiGenerator", "EmojiGenerator\EmojiGenerator.vcxproj", "{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}.Debug|x64.Build.0 = Debug|Any CPU
 		{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}.Release|x64.ActiveCfg = Release|Any CPU
+		{B3CD2F9B-8BE6-4A48-A9ED-F18975537F02}.Release|x64.Build.0 = Release|Any CPU
 		{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}.Debug|x64.Build.0 = Debug|Any CPU
 		{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}.Release|x64.ActiveCfg = Release|Any CPU
+		{4C99EE8C-F283-4C96-8C7B-358EDA7A06C5}.Release|x64.Build.0 = Release|Any CPU
 		{82515C8C-C4D1-4D06-98DF-3ED3F082976A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{82515C8C-C4D1-4D06-98DF-3ED3F082976A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82515C8C-C4D1-4D06-98DF-3ED3F082976A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{82515C8C-C4D1-4D06-98DF-3ED3F082976A}.Debug|x64.Build.0 = Debug|Any CPU
 		{82515C8C-C4D1-4D06-98DF-3ED3F082976A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82515C8C-C4D1-4D06-98DF-3ED3F082976A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82515C8C-C4D1-4D06-98DF-3ED3F082976A}.Release|x64.ActiveCfg = Release|Any CPU
+		{82515C8C-C4D1-4D06-98DF-3ED3F082976A}.Release|x64.Build.0 = Release|Any CPU
+		{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}.Debug|Any CPU.Build.0 = Debug|x64
+		{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}.Debug|x64.ActiveCfg = Debug|x64
+		{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}.Debug|x64.Build.0 = Debug|x64
+		{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}.Release|Any CPU.ActiveCfg = Release|x64
+		{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}.Release|Any CPU.Build.0 = Release|x64
+		{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}.Release|x64.ActiveCfg = Release|x64
+		{8DBDD2B3-5AC4-407F-908F-13C46E33F1E4}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
