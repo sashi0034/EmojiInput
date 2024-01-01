@@ -400,7 +400,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\EmojiInput\Resource\emoji.json" />
     <Content Include="App\.gitignore" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
