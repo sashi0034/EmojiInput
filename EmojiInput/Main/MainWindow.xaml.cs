@@ -131,7 +131,10 @@ namespace EmojiInput.Main
             int cursor = iconCollection.Cursor;
             if (cursor < 0 || _filteredModel.List.Count <= cursor) return;
             Hide();
-            System.Windows.Forms.SendKeys.SendWait(_filteredModel.List[cursor].EmojiCharacter);
+            var selectedEmoji = _filteredModel.List[cursor];
+            System.Windows.Forms.SendKeys.SendWait(selectedEmoji.HasSkinTones && _settingModel.SkinKey != ""
+                ? _skinData.GetSkinEmoji(selectedEmoji.Aliases[0], _settingModel.SkinKey)
+                : selectedEmoji.EmojiCharacter);
         }
 
         private void onClosing(object? sender, CancelEventArgs e)

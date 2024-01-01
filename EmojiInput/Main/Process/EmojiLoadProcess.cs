@@ -18,7 +18,7 @@ public record EmojiLoadProcess(
 {
     private CancellationTokenSource _cancellation = new();
 
-    private Dictionary<string, BitmapImage> _skinIconCache = new();
+    private readonly Dictionary<string, BitmapImage> _skinIconCache = new();
 
     /// <summary>
     /// 画像ファイルを読み込み、BitmapImageに変換する 
