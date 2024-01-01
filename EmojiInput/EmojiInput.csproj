@@ -31,8 +31,4 @@
         </Page>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Resource\emoji_icon\aliased\" />
-    </ItemGroup>
-
 </Project>
