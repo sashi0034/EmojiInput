@@ -3,7 +3,7 @@
 
 namespace
 {
-	constexpr bool isSaveImage = false;
+	constexpr bool isSaveImage = true;
 	constexpr int commonImageSize = 64;
 	constexpr auto solutionRoot = U"../../"_sv;
 	constexpr auto skinOutputDirectory = U"../../EmojiInput/Resource/"_sv;
@@ -18,8 +18,8 @@ namespace
 
 	void saveEmojiImage(StringView outputDirectory, const String& filename, const String& emoji)
 	{
-		auto image = Image(Emoji(emoji));
-		image.scale(((SizeF(image.size()) / image.size().maxComponent()) * commonImageSize).asPoint());;
+		auto image = Image(Emoji(emoji)).squareClipped();
+		image.scale(Size::One() * commonImageSize);
 
 		if (image.size().minComponent() == 0)
 		{
@@ -28,8 +28,6 @@ namespace
 		}
 
 		if constexpr (not isSaveImage) return;
-
-		image.resize(Size::One() * commonImageSize);
 
 		if (image.save(outputDirectory + filename))
 		{
