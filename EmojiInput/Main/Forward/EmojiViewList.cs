@@ -8,19 +8,13 @@ namespace EmojiInput.Main.Forward;
 public class EmojiView
 {
     public readonly int Index;
-    public bool IsValid { get; private set; } = false;
-    public BitmapImage Bitmap { get; private set; } = new();
+    public bool IsValid { get; set; } = false;
+    public BitmapImage Bitmap { get; set; } = new();
 
     public EmojiView(int index)
     {
         Index = index;
         Bitmap.Freeze();
-    }
-
-    public void SetBitmap(BitmapImage bitmapImage)
-    {
-        IsValid = true;
-        Bitmap = bitmapImage;
     }
 }
 

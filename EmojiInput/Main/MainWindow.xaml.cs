@@ -28,6 +28,7 @@ namespace EmojiInput.Main
         private readonly EmojiDatabase _emojiDatabase;
         private readonly EmojiSkinData _skinData;
         private readonly EmojiViewList _emojiViewList;
+        private readonly EmojiLoadProcess _emojiLoadProcess;
         private readonly EmojiFlushProcess _emojiFlushProcess;
         private readonly FocusCursorMover _focusCursorMover;
         private readonly EmojiFilteredModel _filteredModel = new();
@@ -44,15 +45,14 @@ namespace EmojiInput.Main
             iconCollection.Reserve(_emojiDatabase.Count);
             _emojiViewList = new EmojiViewList(_emojiDatabase.Count);
 
+            _emojiLoadProcess = new EmojiLoadProcess(_emojiDatabase, _settingModel, _emojiViewList);
             _emojiFlushProcess = new EmojiFlushProcess(iconCollection, _emojiViewList);
             _focusCursorMover = new FocusCursorMover(
                 _filteredModel, selectedDescription, iconCollection, searchTextBox, scrollViewer);
             _focusCursorMover.Subscribe();
 
             // 絵文字を非同期読み込み
-            new EmojiLoadProcess(_emojiDatabase, _emojiViewList)
-                .StartAsync(_cancellation.Token)
-                .RunErrorHandler();
+            _emojiLoadProcess.StartAsync(_cancellation.Token).RunErrorHandler();
 
             // 絵文字を非同期表示
             _filteredModel.Refresh(_emojiDatabase);
@@ -71,6 +71,11 @@ namespace EmojiInput.Main
 #if DEBUG
             new PopupProcess(this, searchTextBox).StartAsync(_cancellation.Token).RunErrorHandler();
 #endif
+        }
+
+        ~MainWindow()
+        {
+            _cancellation.Cancel();
         }
 
         private void subscribeImageClicked()
@@ -131,7 +136,7 @@ namespace EmojiInput.Main
 
         private void onClosing(object? sender, CancelEventArgs e)
         {
-            // ウィンドウを破棄せずに非表示にする🇷🇼
+            // ウィンドウを破棄せずに非表示にする
             e.Cancel = true;
             Hide();
         }
@@ -151,6 +156,9 @@ namespace EmojiInput.Main
             if (index == -1) return;
             if (e.Source is RadioMenuItem { Header: Image image })
                 selectedSkinImage.Source = image.Source;
+            _settingModel.SkinKey = index == 0 ? "" : _skinData.Keys[index - 1];
+            _emojiLoadProcess.StartAsync(_cancellation.Token).RunErrorHandler();
+            flushEmojiIcons();
         }
 
         private void iconCollection_OnKeyDown(object sender, KeyEventArgs e)

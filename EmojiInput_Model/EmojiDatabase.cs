@@ -15,7 +15,8 @@ public record EmojiData(
     string EmojiCharacter,
     // string ImageFilename,
     string Description,
-    List<string> Aliases
+    List<string> Aliases,
+    bool HasSkinTones
 )
 {
     public string ConcatAliases()
@@ -38,6 +39,7 @@ internal class EmojiJson
     [JsonProperty("emoji")] public string Emoji { get; set; }
     [JsonProperty("description")] public string Description { get; set; }
     [JsonProperty("aliases")] public List<string> Aliases { get; set; }
+    [JsonProperty("skin_tones")] public bool SkinTones { get; set; }
 }
 
 public class EmojiDatabase : List<EmojiData>
@@ -56,7 +58,8 @@ public class EmojiDatabase : List<EmojiData>
                 e.Emoji,
                 // $"emoji_{s}.png",
                 e.Description,
-                e.Aliases));
+                e.Aliases,
+                e.SkinTones));
         }
     }
 }

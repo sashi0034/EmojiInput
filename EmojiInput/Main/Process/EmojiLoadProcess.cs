@@ -5,38 +5,63 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using EmojiInput_Model;
+using EmojiInput_Utils;
 using EmojiInput.Main.Forward;
 
 namespace EmojiInput.Main.Process;
 
 public record EmojiLoadProcess(
     EmojiDatabase EmojiDatabase,
+    EmojiSettingModel SettingModel,
     EmojiViewList ViewList)
 {
+    private CancellationTokenSource _cancellation = new();
+
     /// <summary>
     /// 画像ファイルを読み込み、BitmapImageに変換する 
     /// </summary>
     public async Task StartAsync(CancellationToken cancel)
     {
-        await Task.Run(() => { process(cancel); }, cancel);
+        _cancellation.Cancel();
+        _cancellation = new CancellationTokenSource();
+        await Task.Run(() => { process(cancel); }, cancel.LinkToken(_cancellation));
     }
 
     private void process(CancellationToken cancel)
     {
+        // 先にすべて無効にしておく
+        for (int index = 0; index < EmojiDatabase.Count; index++)
+        {
+            ViewList[index].IsValid = false;
+        }
+
         for (int index = 0; index < EmojiDatabase.Count; index++)
         {
             cancel.ThrowIfCancellationRequested();
             var emoji = EmojiDatabase[index];
+            var iconPath = emoji.HasSkinTones
+                ? EmojiUtils.GetSkinIconPath(emoji.Aliases[0], SettingModel.SkinKey)
+                : EmojiUtils.GetIconPath(emoji.Aliases[0]);
+
+            var iconUri = new Uri(iconPath, UriKind.Relative);
+            if (ViewList[index].Bitmap.UriSource == iconUri)
+            {
+                // すでに読み込み済み
+                ViewList[index].IsValid = true;
+                continue;
+            }
+
             try
             {
+                // 読み込み
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
-                var iconPath = $"Resource/emoji_icon/aliased/{emoji.Aliases[0]}.png";
-                bitmap.UriSource = new Uri(iconPath, UriKind.Relative);
+                bitmap.UriSource = iconUri;
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
                 bitmap.Freeze();
-                ViewList[index].SetBitmap(bitmap);
+                ViewList[index].Bitmap = bitmap;
+                ViewList[index].IsValid = true;
             }
             catch (Exception e)
             {
