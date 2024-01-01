@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -147,33 +145,12 @@ namespace EmojiInput.Main
             _focusCursorMover.MoveCursor(0);
         }
 
-        private void onPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                sendEmojiAndClose();
-                return;
-            }
-
-            _focusCursorMover.PreviewKeyDown(e);
-        }
-
         private void sendEmojiAndClose()
         {
             int cursor = iconCollection.Cursor;
             if (cursor < 0 || _filteredModel.List.Count <= cursor) return;
             Hide();
             System.Windows.Forms.SendKeys.SendWait(_filteredModel.List[cursor].EmojiCharacter);
-        }
-
-        private void onPreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            _focusCursorMover.PreviewTextInput(e);
-        }
-
-        private void scrollViewer_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key is Key.Left or Key.Right or Key.Down or Key.Up) e.Handled = true;
         }
 
         private void onClosing(object? sender, CancelEventArgs e)
@@ -189,6 +166,32 @@ namespace EmojiInput.Main
             _iconSizeModel.Kind = index.ToEnum<EmojiIconSizeKind>();
             iconCollection.ChangeIconSize(_iconSizeModel.Kind);
             _focusCursorMover.ScrollToCursor();
+        }
+
+        private void iconCollection_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) sendEmojiAndClose();
+            _focusCursorMover.PreviewKeyDown(e);
+        }
+
+        private void searchTextBox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) sendEmojiAndClose();
+        }
+
+        private void searchTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            _focusCursorMover.PreviewKeyDown(e);
+        }
+
+        private void iconCollection_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            _focusCursorMover.PreviewKeyDown(e);
+        }
+
+        private void iconCollection_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            _focusCursorMover.PreviewTextInput(e);
         }
     }
 }

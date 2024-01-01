@@ -8,8 +8,6 @@
         xmlns:control="clr-namespace:EmojiInput.Main.Control"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize"
-        PreviewKeyDown="onPreviewKeyDown"
-        PreviewTextInput="onPreviewTextInput"
         ui:WindowHelper.UseModernWindowStyle="True"
         Closing="onClosing">
     <Grid Margin="10 0">
@@ -29,6 +27,8 @@
                      Name="searchTextBox"
                      Text=""
                      Width="400" Height="20"
+                     KeyDown="searchTextBox_OnKeyDown"
+                     PreviewKeyDown="searchTextBox_OnPreviewKeyDown"
                      TextChanged="searchTextBox_OnTextChanged">
             </TextBox>
         </Grid>
@@ -60,9 +60,13 @@
         <!--テーマの確認: https://github.com/Kinnara/ModernWpf/blob/master/ModernWpf/ThemeResources/Dark.xaml-->
         <ScrollViewer Name="scrollViewer"
                       Grid.Row="2"
-                      Background="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                      PreviewKeyDown="scrollViewer_OnPreviewKeyDown">
-            <control:EmojiIconCollection x:Name="iconCollection"></control:EmojiIconCollection>
+                      Background="{DynamicResource SystemControlForegroundBaseLowBrush}">
+            <control:EmojiIconCollection
+                x:Name="iconCollection"
+                KeyDown="iconCollection_OnKeyDown"
+                PreviewKeyDown="iconCollection_OnPreviewKeyDown"
+                PreviewTextInput="iconCollection_OnPreviewTextInput">
+            </control:EmojiIconCollection>
         </ScrollViewer>
     </Grid>
 </Window>

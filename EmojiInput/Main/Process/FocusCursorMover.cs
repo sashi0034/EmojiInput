@@ -75,6 +75,7 @@ public record FocusCursorMover(
 
         if (checkMoveCursorByKey(e.Key, out var nextCursor) == false) return;
 
+        e.Handled = true;
         MoveCursor(nextCursor);
         IconCollection.Focus();
     }
@@ -86,6 +87,7 @@ public record FocusCursorMover(
         {
             // 英数字かアンダースコアが入力されたら検索欄にフォーカス
             focusSearchTextBox();
+            e.Handled = true;
         }
     }
 
