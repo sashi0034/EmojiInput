@@ -23,6 +23,7 @@ namespace EmojiInput.Main
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly EmojiSettingModel _settingModel;
         private readonly WindowInteropHelper _interop;
         private readonly CancellationTokenSource _cancellation = new();
         private readonly EmojiDatabase _emojiDatabase;
@@ -32,13 +33,13 @@ namespace EmojiInput.Main
         private readonly EmojiFlushProcess _emojiFlushProcess;
         private readonly FocusCursorMover _focusCursorMover;
         private readonly EmojiFilteredModel _filteredModel = new();
-        private readonly EmojiSettingModel _settingModel = new();
 
-        public MainWindow()
+        public MainWindow(EmojiSettingModel settingModel)
         {
             InitializeComponent();
 
             // 各初期化
+            _settingModel = settingModel;
             _interop = new WindowInteropHelper(this);
             _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
             _skinData = new EmojiSkinData("Resource/emoji_skin.json");
@@ -130,7 +131,7 @@ namespace EmojiInput.Main
         {
             int cursor = iconCollection.Cursor;
             if (cursor < 0 || _filteredModel.List.Count <= cursor) return;
-            Hide();
+            hideWindow();
             var selectedEmoji = _filteredModel.List[cursor];
             System.Windows.Forms.SendKeys.SendWait(selectedEmoji.HasSkinTones && _settingModel.SkinKey != ""
                 ? _skinData.GetSkinEmoji(selectedEmoji.Aliases[0], _settingModel.SkinKey)
@@ -141,7 +142,13 @@ namespace EmojiInput.Main
         {
             // ウィンドウを破棄せずに非表示にする
             e.Cancel = true;
+            hideWindow();
+        }
+
+        private void hideWindow()
+        {
             Hide();
+            _settingModel.RefreshSave();
         }
 
         private void iconSizeMenu_OnChecked(object sender, RoutedEventArgs e)

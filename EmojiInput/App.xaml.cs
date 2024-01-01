@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using EmojiInput_Model;
 using EmojiInput.Main;
 
 namespace EmojiInput
@@ -14,13 +15,16 @@ namespace EmojiInput
     /// </summary>
     public partial class App : Application
     {
+        private readonly EmojiSettingModel _settingModel = new();
         private readonly MainWindow _mainWindow;
 
         public App()
         {
             InitializeComponent();
 
-            _mainWindow = new MainWindow
+            _settingModel.Load();
+
+            _mainWindow = new MainWindow(_settingModel)
             {
                 ShowInTaskbar = false,
                 ShowActivated = false
