@@ -16,6 +16,7 @@
     <ItemGroup>
         <Content Include="Resource\emoji_icon\aliased\**" CopyToOutputDirectory="PreserveNewest"/>
         <Content Include="Resource\emoji.json" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="Resource\emoji_skin.json" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
     <ItemGroup>

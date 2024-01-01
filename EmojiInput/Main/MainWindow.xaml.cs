@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using EmojiInput_Model;
 using EmojiInput_Utils;
 using EmojiInput.Main.Forward;
@@ -24,6 +26,7 @@ namespace EmojiInput.Main
         private readonly WindowInteropHelper _interop;
         private readonly CancellationTokenSource _cancellation = new();
         private readonly EmojiDatabase _emojiDatabase;
+        private readonly EmojiSkinData _skinData;
         private readonly EmojiViewList _emojiViewList;
         private readonly EmojiFlushProcess _emojiFlushProcess;
         private readonly FocusCursorMover _focusCursorMover;
@@ -37,6 +40,7 @@ namespace EmojiInput.Main
             // 各初期化
             _interop = new WindowInteropHelper(this);
             _emojiDatabase = new EmojiDatabase("Resource/emoji.json");
+            _skinData = new EmojiSkinData("Resource/emoji_skin.json");
             iconCollection.Reserve(_emojiDatabase.Count);
             _emojiViewList = new EmojiViewList(_emojiDatabase.Count);
 
@@ -54,10 +58,8 @@ namespace EmojiInput.Main
             _filteredModel.Refresh(_emojiDatabase);
             flushEmojiIcons();
 
-            // アイコンサイズ設定
-            if (iconSizeMenu.Items[_iconSizeModel.Kind.ToInt()] is RadioMenuItem checkingIconSize)
-                checkingIconSize.IsChecked = true;
-            iconCollection.ChangeIconSize(_iconSizeModel.Kind);
+            // 設定項目初期化
+            setupMenu();
 
             // アイコンクリック時の設定
             subscribeImageClicked();
@@ -68,6 +70,34 @@ namespace EmojiInput.Main
 #if DEBUG
             startAsync(_cancellation.Token).RunTaskHandlingError();
 #endif
+        }
+
+        private void setupMenu()
+        {
+            // 肌の色
+            foreach (var skin in _skinData.Keys.Prepend(""))
+            {
+                bool isChecked = skin == "";
+                var path = $"/Resource/emoji_icon/aliased/hand{(skin == "" ? "" : $"_{skin}")}.png";
+                var skinImage = new Image()
+                {
+                    Source = new BitmapImage(new Uri(path, UriKind.Relative)),
+                    Width = 20,
+                };
+                if (isChecked) selectedSkinImage.Source = skinImage.Source;
+                skinMenu.Items.Add(new RadioMenuItem
+                {
+                    Header = skinImage,
+                    IsChecked = isChecked
+                });
+            }
+
+            if (skinMenu.Items[0] is Image image) selectedSkinImage.Source = image.Source;
+
+            // アイコンサイズ
+            if (iconSizeMenu.Items[_iconSizeModel.Kind.ToInt()] is RadioMenuItem checkingIconSize)
+                checkingIconSize.IsChecked = true;
+            iconCollection.ChangeIconSize(_iconSizeModel.Kind);
         }
 
         private void subscribeImageClicked()
@@ -166,6 +196,14 @@ namespace EmojiInput.Main
             _iconSizeModel.Kind = index.ToEnum<EmojiIconSizeKind>();
             iconCollection.ChangeIconSize(_iconSizeModel.Kind);
             _focusCursorMover.ScrollToCursor();
+        }
+
+        private void skinMenu_OnChecked(object sender, RoutedEventArgs e)
+        {
+            int index = skinMenu.Items.IndexOf(e.Source);
+            if (index == -1) return;
+            if (e.Source is RadioMenuItem { Header: Image image })
+                selectedSkinImage.Source = image.Source;
         }
 
         private void iconCollection_OnKeyDown(object sender, KeyEventArgs e)

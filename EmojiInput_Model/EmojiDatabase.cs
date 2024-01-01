@@ -13,7 +13,7 @@ namespace EmojiInput_Model;
 public record EmojiData(
     int Index,
     string EmojiCharacter,
-    string ImageFilename,
+    // string ImageFilename,
     string Description,
     List<string> Aliases
 )
@@ -50,11 +50,11 @@ public class EmojiDatabase : List<EmojiData>
         for (var index = 0; index < emojis.Count; index++)
         {
             var e = emojis[index];
-            var s = UnicodeUtil.CharacterToUtf32(e.Emoji);
+            // var s = UnicodeUtil.CharacterToUtf32(e.Emoji);
             this.Add(new EmojiData(
                 index,
                 e.Emoji,
-                $"emoji_{s}.png",
+                // $"emoji_{s}.png",
                 e.Description,
                 e.Aliases));
         }
