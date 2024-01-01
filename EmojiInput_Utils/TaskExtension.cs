@@ -22,7 +22,7 @@ public static class TaskExtension
             TaskContinuationOptions.OnlyOnFaulted);
     }
 
-    public static async Task RunTaskHandlingErrorAsync(this Task task)
+    public static async Task RunErrorHandlerAsync(this Task task)
     {
         try
         {
@@ -37,9 +37,9 @@ public static class TaskExtension
         }
     }
 
-    public static void RunTaskHandlingError(this Task task)
+    public static void RunErrorHandler(this Task task)
     {
-        task.RunTaskHandlingErrorAsync().Forget();
+        task.RunErrorHandlerAsync().Forget();
     }
 
     public static CancellationToken LinkToken(this CancellationToken cancel, CancellationTokenSource otherCancel)

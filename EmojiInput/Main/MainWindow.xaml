@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:EmojiInput.Main"
         xmlns:control="clr-namespace:EmojiInput.Main.Control"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize"
+        Title="EmojiInput" Height="450" Width="800" ResizeMode="NoResize"
         ui:WindowHelper.UseModernWindowStyle="True"
         Closing="onClosing">
     <Grid Margin="10 0">

@@ -52,7 +52,7 @@ namespace EmojiInput.Main
             // 絵文字を非同期読み込み
             new EmojiLoadProcess(_emojiDatabase, _emojiViewList)
                 .StartAsync(_cancellation.Token)
-                .RunTaskHandlingError();
+                .RunErrorHandler();
 
             // 絵文字を非同期表示
             _filteredModel.Refresh(_emojiDatabase);
@@ -69,7 +69,7 @@ namespace EmojiInput.Main
             registerHotKeys();
 
 #if DEBUG
-            startAsync(_cancellation.Token).RunTaskHandlingError();
+            new PopupProcess(this, searchTextBox).StartAsync(_cancellation.Token).RunErrorHandler();
 #endif
         }
 
@@ -87,7 +87,7 @@ namespace EmojiInput.Main
 
         private void flushEmojiIcons()
         {
-            _emojiFlushProcess.StartAsync(_filteredModel.List, _cancellation.Token).RunTaskHandlingError();
+            _emojiFlushProcess.StartAsync(_filteredModel.List, _cancellation.Token).RunErrorHandler();
         }
 
         private void registerHotKeys()
@@ -106,36 +106,9 @@ namespace EmojiInput.Main
             switch (msg.wParam.ToInt32())
             {
             case Consts.HotKeyId_1:
-                startAsync(_cancellation.Token).RunTaskHandlingError();
+                new PopupProcess(this, searchTextBox).StartAsync(_cancellation.Token).RunErrorHandler();
                 break;
             }
-        }
-
-        private async Task startAsync(CancellationToken cancel)
-        {
-            if (IsActive) return;
-            Show();
-            popupOnActiveWindow();
-            Dispatcher.Invoke(() =>
-            {
-                searchTextBox.Focus();
-                searchTextBox.SelectAll();
-                // _focusCursorMover.MoveCursor(0);
-            });
-        }
-
-        private void popupOnActiveWindow()
-        {
-            var rect = WinUtil.GetActiveWindowRect();
-            var center = new Vector2(rect.Left + rect.Right, rect.Top + rect.Bottom) / 2;
-            var tl = center / (float)ControlUtil.GetWindowScaling(this);
-            float activeScaling = WinUtil.GetActiveWindowScaling();
-            if (activeScaling == 0) return;
-
-            Left = tl.X - (Width / activeScaling) / 2;
-            Top = tl.Y - (Height / activeScaling) / 2;
-            // Topmost = true;
-            Activate();
         }
 
         private void searchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -158,6 +131,7 @@ namespace EmojiInput.Main
 
         private void onClosing(object? sender, CancelEventArgs e)
         {
+            // ウィンドウを破棄せずに非表示にする🇷🇼
             e.Cancel = true;
             Hide();
         }
