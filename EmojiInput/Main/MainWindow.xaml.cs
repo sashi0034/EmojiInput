@@ -79,7 +79,7 @@ namespace EmojiInput.Main
             registerHotKeys();
 
 #if DEBUG
-            startPopup();
+            StartPopup();
 #endif
         }
 
@@ -128,14 +128,14 @@ namespace EmojiInput.Main
             switch (msg.wParam.ToInt32())
             {
             case Consts.HotKeyId_1:
-                startPopup();
+                StartPopup();
                 break;
             }
         }
 
-        private void startPopup()
+        public void StartPopup()
         {
-            _emojiSendProcess.RegisterForegroundWindow();
+            if (IsActive == false) _emojiSendProcess.RegisterForegroundWindow();
             new PopupProcess(this, searchTextBox).StartAsync(_cancellation.Token).RunErrorHandler();
         }
 

@@ -30,5 +30,33 @@ namespace EmojiInput
                 ShowActivated = false
             };
         }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            setupNotifyIcon();
+        }
+
+        private void setupNotifyIcon()
+        {
+            var icon = GetResourceStream(new Uri("Resource/app_icon.ico", UriKind.Relative))?.Stream;
+            if (icon == null)
+            {
+                Console.Error.WriteLine("Missing application icon");
+                return;
+            }
+
+            var menu = new System.Windows.Forms.ContextMenuStrip();
+            menu.Items.Add("Shutdown Process", null, (_, _) => { Shutdown(); });
+            var notifyIcon = new System.Windows.Forms.NotifyIcon
+            {
+                Visible = true,
+                Icon = new System.Drawing.Icon(icon),
+                Text = "EmojiInput\nCtrl + Alt + :",
+                ContextMenuStrip = menu
+            };
+            // notifyIcon.MouseClick += ((_, _) => { _mainWindow.StartPopup(); });
+        }
     }
 }

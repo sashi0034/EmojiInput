@@ -31,4 +31,9 @@
         </Page>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Remove="Resource\app_icon.ico"/>
+        <Resource Include="Resource\app_icon.ico"/>
+    </ItemGroup>
+
 </Project>
