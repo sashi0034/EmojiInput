@@ -31,6 +31,7 @@ namespace EmojiInput.Main
         private readonly EmojiSendProcess _emojiSendProcess;
         private readonly FocusCursorMover _focusCursorMover;
         private readonly HistoryPresenter _historyPresenter;
+        private readonly SettingWriter _settingWriter;
         private readonly EmojiFilteredModel _filteredModel = new();
 
         private bool _isPinEnabled;
@@ -58,6 +59,7 @@ namespace EmojiInput.Main
             _historyPresenter.Subscribe();
             _historyPresenter.RefreshHeader(_cancellation.Token).RunErrorHandler();
             historyDropdown.OnButtonClicked += onHistoryButtonClicked;
+            _settingWriter = new SettingWriter(_settingModel);
 
             // 絵文字を非同期読み込み
             _emojiLoadProcess.StartAsync(_cancellation.Token).RunErrorHandler();
@@ -176,7 +178,7 @@ namespace EmojiInput.Main
         {
             if (_isPinEnabled) return;
             Hide();
-            _settingModel.RefreshSave();
+            _settingWriter.RequestSave(_cancellation.Token);
         }
 
         private void iconSizeMenu_OnChecked(object sender, RoutedEventArgs e)
