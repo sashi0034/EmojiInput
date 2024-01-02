@@ -42,7 +42,27 @@ namespace EmojiInput
                 ShowActivated = false
             };
 
-            _mainWindow.OnAdminRebootRequested += rebootAsAdmin;
+            if (_settingModel.Data.InstalledPath != Consts.GetCurrentExecutingPath())
+            {
+                MessageBox.Show(
+                    $"You can input emoji: ctrl + shift + :",
+                    "Info",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                askRebootAsAdmin();
+                return;
+            }
+        }
+
+        private void askRebootAsAdmin()
+        {
+            if (MessageBox.Show(
+                    "Do you want to register the application as a startup application?",
+                    "Setup",
+                    MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                rebootAsAdmin();
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -91,7 +111,10 @@ namespace EmojiInput
             {
                 try
                 {
-                    setupAsAdmin();
+                    var path = Consts.GetCurrentExecutingPath();
+                    setupAsAdmin(path);
+                    _settingModel.Data.InstalledPath = path;
+                    _settingModel.RefreshSave();
                     MessageBox.Show($"Finished setup", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
@@ -108,7 +131,7 @@ namespace EmojiInput
             {
                 UseShellExecute = true,
                 WorkingDirectory = Environment.CurrentDirectory,
-                FileName = System.Reflection.Assembly.GetExecutingAssembly().Location,
+                FileName = Consts.AppExecutiveFileName,
                 Verb = "runas"
             };
 
@@ -124,16 +147,14 @@ namespace EmojiInput
         }
 
         /// レジストリに実行ファイルパスを登録する
-        private void setupAsAdmin()
+        private void setupAsAdmin(string path)
         {
             var registry =
                 Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
 
             if (registry == null) throw new NullReferenceException();
 
-            registry.SetValue(
-                Consts.AppProductName,
-                Util.GetCurrentExecutingDir() + @"\" + Consts.AppExecutiveFileName);
+            registry.SetValue(Consts.AppProductName, path);
 
             registry.Close();
         }

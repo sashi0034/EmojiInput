@@ -50,6 +50,7 @@ public class EmojiHistoryArray
 
 public class EmojiSettingPrimitiveData
 {
+    [JsonProperty("installed_path")] public string InstalledPath = "";
     [JsonProperty("skin_key")] public string SkinKey = "";
     [JsonProperty("icon_size")] public EmojiIconSizeKind IconSize = EmojiIconSizeKind.Small;
     [JsonProperty("history")] private List<string>? _history = new();
@@ -60,6 +61,7 @@ public class EmojiSettingPrimitiveData
     {
         return new EmojiSettingPrimitiveData()
         {
+            InstalledPath = InstalledPath,
             SkinKey = SkinKey,
             IconSize = IconSize,
             _history = History.Array.Clone()
@@ -69,6 +71,7 @@ public class EmojiSettingPrimitiveData
     public override bool Equals(object? obj)
     {
         return obj is EmojiSettingPrimitiveData data
+               && this.InstalledPath == data.InstalledPath
                && this.SkinKey == data.SkinKey
                && this.IconSize == data.IconSize
                && this.History.Array.SequenceEqual(data.History.Array);

@@ -34,8 +34,6 @@ namespace EmojiInput.Main
         private readonly SettingWriter _settingWriter;
         private readonly EmojiFilteredModel _filteredModel = new();
 
-        public event Action? OnAdminRebootRequested;
-
         private bool _isPinEnabled;
 
         public MainWindow(EmojiSettingModel settingModel)

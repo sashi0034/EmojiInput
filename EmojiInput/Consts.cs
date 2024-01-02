@@ -1,5 +1,7 @@
 ﻿#nullable enable
 
+using EmojiInput_Utils;
+
 namespace EmojiInput;
 
 public static class Consts
@@ -23,4 +25,9 @@ public static class Consts
     public const int Enough_1000 = 500;
 
     public const int Enough_2000 = 2000;
+
+    public static string GetCurrentExecutingPath()
+    {
+        return Util.GetCurrentExecutingDir() + @"\" + Consts.AppExecutiveFileName;
+    }
 }
