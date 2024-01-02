@@ -28,8 +28,8 @@
                 <ColumnDefinition Width="36"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
-                <ui:TitleBarButton>
+            <Grid Name="pinGrid" Grid.Column="0">
+                <ui:TitleBarButton Click="pinTitleBarButton_OnClick">
                     <ui:TitleBarButton.Content>
                         <Image Source="/Resource/emoji_icon/aliased/pushpin.png" Width="20"></Image>
                     </ui:TitleBarButton.Content>

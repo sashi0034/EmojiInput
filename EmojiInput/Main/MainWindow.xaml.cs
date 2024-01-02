@@ -1,19 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Numerics;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media.Imaging;
+using System.Windows.Media;
 using EmojiInput_Model;
 using EmojiInput_Utils;
 using EmojiInput.Main.Forward;
 using EmojiInput.Main.Process;
-using EmojiInput.Utils;
 using ModernWpf.Controls;
 
 namespace EmojiInput.Main
@@ -33,6 +29,9 @@ namespace EmojiInput.Main
         private readonly EmojiFlushProcess _emojiFlushProcess;
         private readonly FocusCursorMover _focusCursorMover;
         private readonly EmojiFilteredModel _filteredModel = new();
+
+        private IntPtr _lastForegroundWindow;
+        private bool _isPinEnabled;
 
         public MainWindow(EmojiSettingModel settingModel)
         {
@@ -112,6 +111,7 @@ namespace EmojiInput.Main
             switch (msg.wParam.ToInt32())
             {
             case Consts.HotKeyId_1:
+                _lastForegroundWindow = Win32.GetForegroundWindow();
                 new PopupProcess(this, searchTextBox).StartAsync(_cancellation.Token).RunErrorHandler();
                 break;
             }
@@ -131,7 +131,8 @@ namespace EmojiInput.Main
         {
             int cursor = iconCollection.Cursor;
             if (cursor < 0 || _filteredModel.List.Count <= cursor) return;
-            hideWindow();
+            requestHideWindow();
+            Win32.SetForegroundWindow(_lastForegroundWindow);
             var selectedEmoji = _filteredModel.List[cursor];
             System.Windows.Forms.SendKeys.SendWait(selectedEmoji.HasSkinTones && _settingModel.SkinKey != ""
                 ? _skinData.GetSkinEmoji(selectedEmoji.Aliases[0], _settingModel.SkinKey)
@@ -142,11 +143,12 @@ namespace EmojiInput.Main
         {
             // ウィンドウを破棄せずに非表示にする
             e.Cancel = true;
-            hideWindow();
+            requestHideWindow();
         }
 
-        private void hideWindow()
+        private void requestHideWindow()
         {
+            if (_isPinEnabled) return;
             Hide();
             _settingModel.RefreshSave();
         }
@@ -195,6 +197,16 @@ namespace EmojiInput.Main
         private void iconCollection_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             _focusCursorMover.PreviewTextInput(e);
+        }
+
+        private void pinTitleBarButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _isPinEnabled = !_isPinEnabled;
+            Topmost = _isPinEnabled;
+            if (_isPinEnabled)
+                pinGrid.SetResourceReference(Panel.BackgroundProperty, "AccentButtonBackground");
+            else
+                pinGrid.Background = Brushes.Transparent;
         }
     }
 }
