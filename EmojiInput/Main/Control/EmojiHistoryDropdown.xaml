@@ -10,17 +10,19 @@
     <Grid>
         <StackPanel Orientation="Horizontal">
             <ui:SplitButton
-                x:Name="myColorButton"
+                x:Name="splitButton"
                 AutomationProperties.Name="Font color"
                 Padding="0 5"
                 MinHeight="0"
                 MinWidth="0"
                 VerticalAlignment="Top"
-                VerticalContentAlignment="Center">
+                VerticalContentAlignment="Center"
+                Click="splitButton_OnClick">
                 <Image Source="/Resource/emoji_icon/aliased/+1.png" Width="20"></Image>
                 <ui:SplitButton.Flyout>
                     <ui:Flyout Placement="BottomEdgeAlignedRight">
                         <UniformGrid
+                            Name="uniformGrid"
                             Rows="6"
                             Columns="5">
                             <UniformGrid.Resources>
@@ -36,21 +38,6 @@
                                     <Setter Property="Margin" Value="5" />
                                 </Style>
                             </UniformGrid.Resources>
-                            <Button
-                                Click="button_Click"
-                                ToolTip="+1"
-                                AutomationProperties.Name="Indigo">
-                                <Button.Content>
-                                    <Image Source="/Resource/emoji_icon/aliased/+1.png"></Image>
-                                </Button.Content>
-                            </Button>
-                            <Button
-                                Click="button_Click"
-                                AutomationProperties.Name="Indigo">
-                                <Button.Content>
-                                    <Image Source="/Resource/emoji_icon/aliased/+1.png"></Image>
-                                </Button.Content>
-                            </Button>
                         </UniformGrid>
                     </ui:Flyout>
                 </ui:SplitButton.Flyout>

@@ -54,9 +54,9 @@
                      PreviewKeyDown="searchTextBox_OnPreviewKeyDown"
                      TextChanged="searchTextBox_OnTextChanged">
             </TextBox>
-            <StackPanel Grid.Column="2" Orientation="Horizontal" >
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <TextBlock Text="🕒 History" VerticalAlignment="Center"></TextBlock>
-                <control:EmojiHistoryDropdown Margin="10 5" VerticalAlignment="Center"></control:EmojiHistoryDropdown>
+                <control:EmojiHistoryDropdown x:Name="historyDropdown" Margin="10 5" VerticalAlignment="Center"></control:EmojiHistoryDropdown>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="2" Margin="10 0">

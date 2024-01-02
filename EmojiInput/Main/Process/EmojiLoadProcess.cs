@@ -42,9 +42,7 @@ public record EmojiLoadProcess(
         {
             cancel.ThrowIfCancellationRequested();
             var emoji = EmojiDatabase[index];
-            var iconPath = emoji.HasSkinTones
-                ? EmojiUtils.GetSkinIconPath(emoji.Aliases[0], SettingModel.Data.SkinKey)
-                : EmojiUtils.GetIconPath(emoji.Aliases[0]);
+            var iconPath = EmojiUtils.GetIconPath(emoji, SettingModel.Data.SkinKey);
 
             var iconUri = new Uri(iconPath, UriKind.Relative);
             if (ViewList[index].Bitmap.UriSource == iconUri)

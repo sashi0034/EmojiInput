@@ -1,19 +1,23 @@
 ﻿#nullable enable
 
+using EmojiInput_Model;
+
 namespace EmojiInput.Main.Forward;
 
 public static class EmojiUtils
 {
-    public static string GetSkinIconPath(string aliases, string skin)
+    public static string GetIconFilename(EmojiData emoji, string skin)
     {
-        var skinSuffix = skin != ""
+        var skinSuffix = emoji.HasSkinTones && skin != ""
             ? "_" + skin
             : "";
-        return $"Resource/emoji_icon/aliased/{aliases}{skinSuffix}.png";
+        return $"{emoji.Aliases[0]}{skinSuffix}";
     }
 
-    public static string GetIconPath(string aliases)
+    public const string IconDirectory = "Resource/emoji_icon/aliased/";
+
+    public static string GetIconPath(EmojiData emoji, string skin)
     {
-        return GetSkinIconPath(aliases, "");
+        return $"{IconDirectory}{GetIconFilename(emoji, skin)}.png";
     }
 }

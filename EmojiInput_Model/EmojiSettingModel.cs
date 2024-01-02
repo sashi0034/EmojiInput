@@ -31,6 +31,21 @@ public class EmojiHistoryArray
         _array = array;
         while (_array.Count < Size) _array.Add("");
     }
+
+    public void RenewData(string data)
+    {
+        int index = _array.IndexOf(data);
+        if (index == -1)
+        {
+            _array.RemoveAt(_array.Count - 1);
+        }
+        else
+        {
+            _array.RemoveAt(index);
+        }
+
+        _array.Insert(0, data);
+    }
 }
 
 public class EmojiSettingPrimitiveData
@@ -68,7 +83,7 @@ public class EmojiSettingPrimitiveData
 
 public class EmojiSettingModel
 {
-    public const string DefaultFilepath = "config.json";
+    public const string DefaultFilepath = "setting.json";
 
     private EmojiSettingPrimitiveData _data = new();
     private EmojiSettingPrimitiveData _lastSavedData = new();
@@ -77,11 +92,11 @@ public class EmojiSettingModel
 
     public void RefreshSave(string filepath = DefaultFilepath)
     {
-        // if (_data == _lastSavedData) return;
+        if (_data == _lastSavedData) return;
         try
         {
             using var sw = new StreamWriter(filepath, false, Encoding.UTF8);
-            sw.Write(JsonConvert.SerializeObject(_data));
+            sw.Write(JsonConvert.SerializeObject(_data, Formatting.Indented));
             _lastSavedData = _data.Clone();
         }
         catch (Exception e)

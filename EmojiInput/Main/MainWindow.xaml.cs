@@ -137,8 +137,10 @@ namespace EmojiInput.Main
         {
             int cursor = iconCollection.Cursor;
             if (cursor < 0 || _filteredModel.List.Count <= cursor) return;
+            var emoji = _filteredModel.List[cursor];
+            _settingModel.Data.History.RenewData(emoji.Aliases[0]);
             requestHideWindow();
-            _emojiSendProcess.StartAsync(_filteredModel.List[cursor], _cancellation.Token).RunErrorHandler();
+            _emojiSendProcess.StartAsync(emoji, _cancellation.Token).RunErrorHandler();
         }
 
         private void onClosing(object? sender, CancelEventArgs e)
