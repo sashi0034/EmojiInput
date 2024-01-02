@@ -61,7 +61,7 @@ namespace EmojiInput.Main
 
             // 設定項目初期化
             new MenuSetup(_skinData, _settingModel, skinMenu, selectedSkinImage, iconSizeMenu).Invoke();
-            iconCollection.ChangeIconSize(_settingModel.IconSize);
+            iconCollection.ChangeIconSize(_settingModel.Data.IconSize);
 
             // アイコンクリック時の設定
             subscribeImageClicked();
@@ -161,8 +161,8 @@ namespace EmojiInput.Main
         {
             int index = iconSizeMenu.Items.IndexOf(e.Source);
             if (index == -1) return;
-            _settingModel.IconSize = index.ToEnum<EmojiIconSizeKind>();
-            iconCollection.ChangeIconSize(_settingModel.IconSize);
+            _settingModel.Data.IconSize = index.ToEnum<EmojiIconSizeKind>();
+            iconCollection.ChangeIconSize(_settingModel.Data.IconSize);
             _focusCursorMover.ScrollToCursor();
         }
 
@@ -172,7 +172,7 @@ namespace EmojiInput.Main
             if (index == -1) return;
             if (e.Source is RadioMenuItem { Header: Image image })
                 selectedSkinImage.Source = image.Source;
-            _settingModel.SkinKey = index == 0 ? "" : _skinData.Keys[index - 1];
+            _settingModel.Data.SkinKey = index == 0 ? "" : _skinData.Keys[index - 1];
             _emojiLoadProcess.StartAsync(_cancellation.Token).RunErrorHandler();
             flushEmojiIcons();
         }

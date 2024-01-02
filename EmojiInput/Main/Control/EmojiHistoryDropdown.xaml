@@ -22,7 +22,7 @@
                     <ui:Flyout Placement="BottomEdgeAlignedRight">
                         <UniformGrid
                             Rows="6"
-                            Columns="6">
+                            Columns="5">
                             <UniformGrid.Resources>
                                 <Style TargetType="Image">
                                     <Setter Property="Width" Value="40" />
@@ -38,6 +38,7 @@
                             </UniformGrid.Resources>
                             <Button
                                 Click="button_Click"
+                                ToolTip="+1"
                                 AutomationProperties.Name="Indigo">
                                 <Button.Content>
                                     <Image Source="/Resource/emoji_icon/aliased/+1.png"></Image>

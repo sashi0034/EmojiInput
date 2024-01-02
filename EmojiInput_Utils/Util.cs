@@ -41,4 +41,9 @@ public static class Util
             action(obj, num++);
         return forEach;
     }
+
+    public static List<T> Clone<T>(this IEnumerable<T> source)
+    {
+        return new List<T>(source);
+    }
 }

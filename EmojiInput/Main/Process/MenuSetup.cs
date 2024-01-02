@@ -22,7 +22,7 @@ public record MenuSetup(
         // 肌の色
         foreach (var skin in SkinData.Keys.Prepend(""))
         {
-            bool isChecked = skin == SettingModel.SkinKey;
+            bool isChecked = skin == SettingModel.Data.SkinKey;
             var path = $"/Resource/emoji_icon/aliased/hand{(skin == "" ? "" : $"_{skin}")}.png";
             var skinImage = new Image()
             {
@@ -40,7 +40,7 @@ public record MenuSetup(
         if (SkinMenu.Items[0] is Image image) SelectedSkinImage.Source = image.Source;
 
         // アイコンサイズ
-        if (IconSizeMenu.Items[SettingModel.IconSize.ToInt()] is RadioMenuItem checkingIconSize)
+        if (IconSizeMenu.Items[SettingModel.Data.IconSize.ToInt()] is RadioMenuItem checkingIconSize)
             checkingIconSize.IsChecked = true;
     }
 }

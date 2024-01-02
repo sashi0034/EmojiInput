@@ -63,8 +63,8 @@ public record EmojiSendProcess(
             Win32.SetForegroundWindow(_lastForegroundWindow);
 
             // 送信処理
-            System.Windows.Forms.SendKeys.SendWait(selectedEmoji.HasSkinTones && SettingModel.SkinKey != ""
-                ? SkinData.GetSkinEmoji(selectedEmoji.Aliases[0], SettingModel.SkinKey)
+            System.Windows.Forms.SendKeys.SendWait(selectedEmoji.HasSkinTones && SettingModel.Data.SkinKey != ""
+                ? SkinData.GetSkinEmoji(selectedEmoji.Aliases[0], SettingModel.Data.SkinKey)
                 : selectedEmoji.EmojiCharacter);
 
             // 受理されてなさそうな時があるので一応待機
