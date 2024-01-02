@@ -56,6 +56,7 @@ namespace EmojiInput.Main
             _historyPresenter =
                 new HistoryPresenter(_emojiDatabase, _settingModel.Data, _emojiViewList, historyDropdown);
             _historyPresenter.Subscribe();
+            _historyPresenter.RefreshHeader(_cancellation.Token).RunErrorHandler();
             historyDropdown.OnButtonClicked += onHistoryButtonClicked;
 
             // 絵文字を非同期読み込み
@@ -157,6 +158,7 @@ namespace EmojiInput.Main
         private void sendEmojiAndClose(EmojiData emoji)
         {
             _settingModel.Data.History.RenewData(emoji.Aliases[0]);
+            _historyPresenter.RefreshHeader(_cancellation.Token).RunErrorHandler();
             requestHideWindow();
             _emojiSendProcess.StartAsync(emoji, _cancellation.Token).RunErrorHandler();
         }

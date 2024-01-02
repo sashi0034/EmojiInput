@@ -1,6 +1,8 @@
 ﻿#nullable enable
 
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using EmojiInput_Model;
 using EmojiInput.Main.Control;
@@ -17,6 +19,25 @@ public record HistoryPresenter(
     public void Subscribe()
     {
         HistoryDropdown.OnDropdownStarted += onDropdownStarted;
+    }
+
+    public async Task RefreshHeader(CancellationToken cancel)
+    {
+        var history = SettingData.History.Array[0];
+        var historyEmoji = Database.FirstOrDefault(e => e.Aliases[0] == history);
+        if (historyEmoji == null) return;
+
+        // 読み込まれるまで待機
+        while (EmojiViewList[historyEmoji.Index].IsValid == false)
+        {
+            await Task.Delay(Consts.Enough_100, cancel);
+        }
+
+        // 反映
+        HistoryDropdown.Dispatcher.Invoke(() =>
+        {
+            HistoryDropdown.headerImage.Source = EmojiViewList[historyEmoji.Index].Bitmap;
+        });
     }
 
     private void onDropdownStarted()
