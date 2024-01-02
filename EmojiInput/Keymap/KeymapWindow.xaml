@@ -1,0 +1,15 @@
+﻿<Window x:Class="EmojiInput.Keymap.KeymapWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:EmojiInput.Keymap"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        mc:Ignorable="d"
+        Title="EmojiInput (Keymap)" Height="200" Width="250"
+        ResizeMode="NoResize"
+        ui:WindowHelper.UseModernWindowStyle="True">
+    <Grid>
+        <!-- TODO -->
+    </Grid>
+</Window>
