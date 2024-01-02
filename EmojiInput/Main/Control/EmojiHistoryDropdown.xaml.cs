@@ -10,7 +10,7 @@ namespace EmojiInput.Main.Control;
 public partial class EmojiHistoryDropdown : UserControl
 {
     public event Action? OnDropdownStarted;
-    public event Action<int>? OnDButtonClicked;
+    public event Action<int>? OnButtonClicked;
 
     private readonly List<Button> _buttons = new();
     public IReadOnlyList<Button> Buttons => _buttons;
@@ -40,10 +40,15 @@ public partial class EmojiHistoryDropdown : UserControl
     {
         if (sender is not Button button) return;
         int index = _buttons.IndexOf(button);
-        OnDButtonClicked?.Invoke(index);
+        if (_images[index].IsVisible) OnButtonClicked?.Invoke(index);
     }
 
     private void splitButton_OnClick(SplitButton sender, SplitButtonClickEventArgs args)
+    {
+        splitButton.Flyout.ShowAt(sender);
+    }
+
+    private void flyout_OnOpened(object? sender, object e)
     {
         OnDropdownStarted?.Invoke();
     }

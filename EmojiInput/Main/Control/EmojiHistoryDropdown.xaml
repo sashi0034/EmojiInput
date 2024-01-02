@@ -20,7 +20,7 @@
                 Click="splitButton_OnClick">
                 <Image Source="/Resource/emoji_icon/aliased/+1.png" Width="20"></Image>
                 <ui:SplitButton.Flyout>
-                    <ui:Flyout Placement="BottomEdgeAlignedRight">
+                    <ui:Flyout Placement="BottomEdgeAlignedRight" Opened="flyout_OnOpened">
                         <UniformGrid
                             Name="uniformGrid"
                             Rows="6"

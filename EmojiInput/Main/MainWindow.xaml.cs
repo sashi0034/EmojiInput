@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,6 +30,7 @@ namespace EmojiInput.Main
         private readonly EmojiFlushProcess _emojiFlushProcess;
         private readonly EmojiSendProcess _emojiSendProcess;
         private readonly FocusCursorMover _focusCursorMover;
+        private readonly HistoryPresenter _historyPresenter;
         private readonly EmojiFilteredModel _filteredModel = new();
 
         private bool _isPinEnabled;
@@ -51,6 +53,10 @@ namespace EmojiInput.Main
             _focusCursorMover = new FocusCursorMover(
                 _filteredModel, selectedDescription, iconCollection, searchTextBox, scrollViewer);
             _focusCursorMover.Subscribe();
+            _historyPresenter =
+                new HistoryPresenter(_emojiDatabase, _settingModel.Data, _emojiViewList, historyDropdown);
+            _historyPresenter.Subscribe();
+            historyDropdown.OnButtonClicked += onHistoryButtonClicked;
 
             // 絵文字を非同期読み込み
             _emojiLoadProcess.StartAsync(_cancellation.Token).RunErrorHandler();
@@ -86,9 +92,16 @@ namespace EmojiInput.Main
                 image.MouseLeftButtonUp += ((_, _) =>
                 {
                     _focusCursorMover.MoveCursor(index);
-                    sendEmojiAndClose();
+                    sendFilteredEmojiAndClose();
                 });
             }));
+        }
+
+        private void onHistoryButtonClicked(int index)
+        {
+            var history = _settingModel.Data.History.Array[index];
+            var historyEmoji = _emojiDatabase.FirstOrDefault(e => e.Aliases[0] == history);
+            if (historyEmoji != null) sendEmojiAndClose(historyEmoji);
         }
 
         private void flushEmojiIcons()
@@ -133,11 +146,16 @@ namespace EmojiInput.Main
             _focusCursorMover.MoveCursor(0);
         }
 
-        private void sendEmojiAndClose()
+        private void sendFilteredEmojiAndClose()
         {
             int cursor = iconCollection.Cursor;
             if (cursor < 0 || _filteredModel.List.Count <= cursor) return;
             var emoji = _filteredModel.List[cursor];
+            sendEmojiAndClose(emoji);
+        }
+
+        private void sendEmojiAndClose(EmojiData emoji)
+        {
             _settingModel.Data.History.RenewData(emoji.Aliases[0]);
             requestHideWindow();
             _emojiSendProcess.StartAsync(emoji, _cancellation.Token).RunErrorHandler();
@@ -181,13 +199,13 @@ namespace EmojiInput.Main
 
         private void iconCollection_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) sendEmojiAndClose();
+            if (e.Key == Key.Enter) sendFilteredEmojiAndClose();
             _focusCursorMover.PreviewKeyDown(e);
         }
 
         private void searchTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) sendEmojiAndClose();
+            if (e.Key == Key.Enter) sendFilteredEmojiAndClose();
         }
 
         private void searchTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)

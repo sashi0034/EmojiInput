@@ -52,7 +52,7 @@ public class EmojiSettingPrimitiveData
 {
     [JsonProperty("skin_key")] public string SkinKey = "";
     [JsonProperty("icon_size")] public EmojiIconSizeKind IconSize = EmojiIconSizeKind.Small;
-    [JsonProperty("history")] private List<string>? _history = new EmojiHistoryArray().Array.Clone();
+    [JsonProperty("history")] private List<string>? _history = new();
 
     [JsonIgnore] public EmojiHistoryArray History => new EmojiHistoryArray(_history ??= new List<string>());
 
