@@ -7,16 +7,36 @@
         xmlns:local="clr-namespace:EmojiInput.Main"
         xmlns:control="clr-namespace:EmojiInput.Main.Control"
         mc:Ignorable="d"
-        Title="EmojiInput" Height="450" Width="800" ResizeMode="NoResize"
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize"
         ui:WindowHelper.UseModernWindowStyle="True"
+        ui:TitleBar.ExtendViewIntoTitleBar="True"
         Closing="onClosing">
     <Grid Margin="10 0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="10 0">
+        <Grid Grid.Row="0"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Center"
+              Height="{Binding ElementName=Window, Path=(ui:TitleBar.Height)}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="36"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <ui:TitleBarButton>
+                    <ui:TitleBarButton.Content>
+                        <Image Source="/Resource/emoji_icon/aliased/pushpin.png" Width="20"></Image>
+                    </ui:TitleBarButton.Content>
+                </ui:TitleBarButton>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1" Margin="10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -32,7 +52,7 @@
                      TextChanged="searchTextBox_OnTextChanged">
             </TextBox>
         </Grid>
-        <Grid Grid.Row="1" Margin="10 0">
+        <Grid Grid.Row="2" Margin="10 0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -64,7 +84,7 @@
 
         <!--テーマの確認: https://github.com/Kinnara/ModernWpf/blob/master/ModernWpf/ThemeResources/Dark.xaml-->
         <ScrollViewer Name="scrollViewer"
-                      Grid.Row="2"
+                      Grid.Row="3"
                       Background="{DynamicResource SystemControlForegroundBaseLowBrush}">
             <control:EmojiIconCollection
                 x:Name="iconCollection"
