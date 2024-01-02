@@ -210,6 +210,7 @@ namespace EmojiInput.Main
         private void searchTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) sendFilteredEmojiAndClose();
+            else if (e.Key == Key.Escape) requestHideWindow();
         }
 
         private void searchTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
