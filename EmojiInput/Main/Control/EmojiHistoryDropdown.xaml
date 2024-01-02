@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="EmojiInput.Main.Control.EmojiHistoryDropdown"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:EmojiInput.Main.Control"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <ui:SplitButton
+                x:Name="myColorButton"
+                AutomationProperties.Name="Font color"
+                Padding="0 5"
+                MinHeight="0"
+                MinWidth="0"
+                VerticalAlignment="Top"
+                VerticalContentAlignment="Center">
+                <Image Source="/Resource/emoji_icon/aliased/+1.png" Width="20"></Image>
+                <ui:SplitButton.Flyout>
+                    <ui:Flyout Placement="BottomEdgeAlignedRight">
+                        <UniformGrid
+                            Rows="6"
+                            Columns="6">
+                            <UniformGrid.Resources>
+                                <Style TargetType="Image">
+                                    <Setter Property="Width" Value="40" />
+                                    <Setter Property="Height" Value="40" />
+                                    <Setter Property="Margin" Value="5"></Setter>
+                                </Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="MinWidth" Value="0" />
+                                    <Setter Property="MinHeight" Value="0" />
+                                    <Setter Property="Margin" Value="5" />
+                                </Style>
+                            </UniformGrid.Resources>
+                            <Button
+                                Click="button_Click"
+                                AutomationProperties.Name="Indigo">
+                                <Button.Content>
+                                    <Image Source="/Resource/emoji_icon/aliased/+1.png"></Image>
+                                </Button.Content>
+                            </Button>
+                            <Button
+                                Click="button_Click"
+                                AutomationProperties.Name="Indigo">
+                                <Button.Content>
+                                    <Image Source="/Resource/emoji_icon/aliased/+1.png"></Image>
+                                </Button.Content>
+                            </Button>
+                        </UniformGrid>
+                    </ui:Flyout>
+                </ui:SplitButton.Flyout>
+            </ui:SplitButton>
+        </StackPanel>
+    </Grid>
+</UserControl>
