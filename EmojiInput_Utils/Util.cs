@@ -46,4 +46,9 @@ public static class Util
     {
         return new List<T>(source);
     }
+
+    public static string? GetCurrentExecutingDir()
+    {
+        return System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+    }
 }

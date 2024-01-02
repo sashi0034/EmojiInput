@@ -4,6 +4,10 @@ namespace EmojiInput;
 
 public static class Consts
 {
+    public const string AppProductName = "EmojiInput";
+
+    public const string AppExecutiveFileName = "EmojiInput.exe";
+
     public const int HotKeyId_1 = 1;
 
     public const int MessageHotKey_0x0312 = 0x0312;
