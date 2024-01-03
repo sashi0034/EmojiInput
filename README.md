@@ -2,7 +2,7 @@
 
 # Features 🥳
 
-- Easy-to-use emoji input app ✨
+- Easy-to-use emoji input for Windows 🪟
     - Press `Ctrl + Shift + :` and the input window will pop up ⚡
 
 ![screenshot](https://i.gyazo.com/78a3cf679f258acbf6dbc40f12e8acf3.gif)
