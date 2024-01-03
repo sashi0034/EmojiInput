@@ -46,7 +46,7 @@ namespace EmojiInput
             if (_settingModel.Data.InstalledPath != Consts.GetCurrentExecutingPath())
             {
                 MessageBox.Show(
-                    $"You can input emoji: ctrl + shift + :",
+                    $"You can input emoji: Ctrl + Alt + :",
                     "Info",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
