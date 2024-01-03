@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using EmojiInput_Model;
 using EmojiInput_Utils;
@@ -36,6 +31,7 @@ namespace EmojiInput
                 // 多重起動防止
                 _mutex.Close();
                 Shutdown();
+                return;
             }
 
             _settingModel.Load();
@@ -46,6 +42,7 @@ namespace EmojiInput
                 ShowActivated = false
             };
 
+#if !DEBUG
             if (_settingModel.Data.InstalledPath != Consts.GetCurrentExecutingPath())
             {
                 MessageBox.Show(
@@ -56,6 +53,7 @@ namespace EmojiInput
                 askRebootAsAdmin();
                 return;
             }
+#endif
         }
 
         private void askRebootAsAdmin()
@@ -95,6 +93,12 @@ namespace EmojiInput
             }
 
             var menu = new System.Windows.Forms.ContextMenuStrip();
+            menu.Items.Add("Open Application Directory", null,
+                (_, _) =>
+                {
+                    var dir = Util.GetCurrentExecutingDir();
+                    if (dir != null) Process.Start("explorer.exe", dir);
+                });
             menu.Items.Add("Shutdown Process", null, (_, _) => { Shutdown(); });
             var notifyIcon = new System.Windows.Forms.NotifyIcon
             {

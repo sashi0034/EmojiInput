@@ -8,7 +8,7 @@
 ![screenshot](https://i.gyazo.com/78a3cf679f258acbf6dbc40f12e8acf3.gif)
 
 
-# Licence 🙇
+# Licence 🖊️
 
 [Noto Emoji](https://github.com/googlefonts/noto-emoji)
 
