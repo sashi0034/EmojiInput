@@ -20,6 +20,7 @@ public record PopupProcess(
         Window.Dispatcher.Invoke(() =>
         {
             Window.WindowStyle = WindowStyle.None;
+            Window.Topmost = true;
             popupOnActiveWindow();
             searchTextBox.Focus();
             searchTextBox.SelectAll();
@@ -28,7 +29,16 @@ public record PopupProcess(
 
         await Task.Delay(1, cancel);
 
-        Window.Dispatcher.Invoke(() => { Window.WindowStyle = WindowStyle.SingleBorderWindow; });
+        Window.Dispatcher.Invoke(() =>
+        {
+            Window.WindowStyle = WindowStyle.SingleBorderWindow;
+            Window.Topmost = false;
+        });
+
+        await Task.Delay(1, cancel);
+
+        // 初回起動時にうまくいかないときがあるのでもう一度設定する
+        Window.Dispatcher.Invoke(popupOnActiveWindow);
     }
 
     private void popupOnActiveWindow()
@@ -41,7 +51,6 @@ public record PopupProcess(
 
         Window.Left = tl.X - (Window.Width / activeScaling) / 2;
         Window.Top = tl.Y - (Window.Height / activeScaling) / 2;
-        // Window.Topmost = true;
         Window.Activate();
         Window.Show();
     }
