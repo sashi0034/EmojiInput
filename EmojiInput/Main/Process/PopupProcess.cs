@@ -17,11 +17,14 @@ public record PopupProcess(
     public async Task StartAsync(CancellationToken cancel)
     {
         if (Window.IsActive) return;
+
+        var activeWindowRect = WinUtil.GetActiveWindowRect();
+
         Window.Dispatcher.Invoke(() =>
         {
             Window.WindowStyle = WindowStyle.None;
             Window.Topmost = true;
-            popupOnActiveWindow();
+            popupOnActiveWindow(activeWindowRect);
             searchTextBox.Focus();
             searchTextBox.SelectAll();
             // _focusCursorMover.MoveCursor(0);
@@ -38,13 +41,12 @@ public record PopupProcess(
         await Task.Delay(1, cancel);
 
         // 初回起動時にうまくいかないときがあるのでもう一度設定する
-        Window.Dispatcher.Invoke(popupOnActiveWindow);
+        Window.Dispatcher.Invoke(() => { popupOnActiveWindow(activeWindowRect); });
     }
 
-    private void popupOnActiveWindow()
+    private void popupOnActiveWindow(RECT activeWindow)
     {
-        var rect = WinUtil.GetActiveWindowRect();
-        var center = new Vector2(rect.Left + rect.Right, rect.Top + rect.Bottom) / 2;
+        var center = new Vector2(activeWindow.Left + activeWindow.Right, activeWindow.Top + activeWindow.Bottom) / 2;
         var tl = center / (float)ControlUtil.GetWindowScaling(Window);
         float activeScaling = WinUtil.GetActiveWindowScaling();
         if (activeScaling == 0) return;
