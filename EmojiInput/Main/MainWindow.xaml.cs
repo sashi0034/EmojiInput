@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -141,12 +142,22 @@ namespace EmojiInput.Main
 
         private void searchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            iconCollection.LocateCursor(0);
-            _filteredModel.FilterRefresh(_emojiDatabase, searchTextBox.Text.TrimStart());
-            flushEmojiIcons();
+            updateSearch(_cancellation.Token).RunErrorHandler();
+        }
 
-            // 検索したらカーソルをリセット
-            _focusCursorMover.MoveCursor(0);
+        private async Task updateSearch(CancellationToken cancel)
+        {
+            await Task.Delay(1, cancel);
+            await Task.Delay(1, cancel);
+            Dispatcher.Invoke(() =>
+            {
+                iconCollection.LocateCursor(0);
+                _filteredModel.FilterRefresh(_emojiDatabase, searchTextBox.Text.TrimStart());
+                flushEmojiIcons();
+
+                // 検索したらカーソルをリセット
+                _focusCursorMover.MoveCursor(0);
+            });
         }
 
         private void sendFilteredEmojiAndClose()
